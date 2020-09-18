@@ -76,18 +76,13 @@ namespace StockProfiler
     {
         public List<dynamic> result { get; set; }
     }
-
-    public class Result
-    {
-        public Quote quote { get; set; }
-    }
     #endregion
 
     public class Quote
     {
         public Quote()
         {
-            // default empty constructor 
+            // default constructor 
         }
 
         public Quote(string symbol, double price, int time)
@@ -114,7 +109,5 @@ namespace StockProfiler
         public int EarningsTimestamp { get; set; }
         public double FiftyDayAverage { get; set; }
         public double TwoHundredDayAverage { get; set; }
-
-
-    }
+    }    
 }

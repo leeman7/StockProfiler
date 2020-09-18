@@ -1,13 +1,247 @@
-﻿using RestSharp;
+﻿using System;
+using MongoDB.Driver.Core.Operations;
+using RestSharp;
 
 namespace StockProfiler
 {
     public class Rapid
     {
         // Constants
+        private const string HEADERHOST = "x-rapidapi-host";
+        private const string HEADERKEY = "x-rapidapi-key";
         private const string RAPIDHOST = "apidojo-yahoo-finance-v1.p.rapidapi.com";
         private const string RAPIDKEY = "dbf9709d05msh063e6dfc0a65f37p1e763ejsn155b8b59ced5";
         private const string ADDRESS = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/";
+        public string[] WATCHLIST = { "MSFT", "AAPL", "FB", "TSLA", "JNJ", "PG", "T", "SCHW", "MS", "BRKB", "CSCO", "SBUX" };
+
+        /// <summary>
+        /// Used to set the market region for the given request.
+        /// Cases: US|BR|AU|CA|FR|DE|HK|IN|IT|ES|GB|SG
+        /// </summary>
+        public enum RequestRegion
+        {
+            US, // United States
+            BR, // Brazil
+            AU, // Australia
+            CA, // Canada
+            FR, // France
+            DE, // Germany
+            HK, // Hong Kong
+            IN, // India
+            IT, // Italy
+            ES, // Spain
+            GB, // United Kingdom
+            SG  // Singapore
+        }
+
+        /// <summary>
+        /// Request Type
+        /// TODO: Add the others in case this gets bigger.
+        /// </summary>
+        public enum RequestType
+        {
+            MARKET,
+            STOCK,
+            NEWS
+        }
+
+        /// <summary>
+        /// Request version code; some of the requests have multiple versions and or deprecated.
+        /// So it's important to include these for future development.
+        /// </summary>
+        public enum RequestVersion
+        {
+            NONE,
+            V1,
+            V2,
+            V3
+        }
+
+        /// <summary>
+        /// Request sub-type. This denotes the actual request we will be making.
+        /// Note that not all of these have a version and or are under different Request types.
+        /// </summary>
+        public enum RequestSubType
+        {
+            QUOTES,
+            WATCHLIST,
+            SUMMARY,
+            CHARTS,
+            PROFILE,
+            EARNINGS,
+            ANALYSIS,
+            HISTORICAL,
+            TRENDING
+        }
+
+        /// <summary>
+        /// TODO: write parsing logic to get details we need and leave user custom string.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public string ParseRequestString(string request)
+        {
+            string parsed = string.Empty;
+
+            return parsed;
+        }
+
+        /// <summary>
+        /// Get the region for the request we are building.
+        /// </summary>
+        /// <param name="region"></param>
+        /// <returns></returns>
+        public string GetRequestRegion(RequestRegion region)
+        {
+            switch (region)
+            {
+                case RequestRegion.US:
+                    return "US";
+                case RequestRegion.BR:
+                    return "BR";
+                case RequestRegion.AU:
+                    return "AU";
+                case RequestRegion.CA:
+                    return "CA";
+                case RequestRegion.FR:
+                    return "FR";
+                case RequestRegion.DE:
+                    return "DE";
+                case RequestRegion.HK:
+                    return "HK";
+                case RequestRegion.IN:
+                    return "IN";
+                case RequestRegion.IT:
+                    return "IT";
+                case RequestRegion.ES:
+                    return "ES";
+                case RequestRegion.GB:
+                    return "GB";
+                case RequestRegion.SG:
+                    return "SG";
+                default:
+                    return "US";
+            }
+        }
+
+        /// <summary>
+        /// Generate the request string that will be sent to make the Rapid Request call.
+        /// </summary>
+        /// <param name="requestType"></param>
+        /// <param name="requestVersion"></param>
+        /// <param name="requestSubType"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public string GenerateRequestString(RequestType requestType, RequestVersion requestVersion, RequestSubType requestSubType, string request)
+        {
+            string reqTypeStr = GetRequestType(requestType);
+            string reqVersionStr = GetRequestVersion(requestVersion);
+            string reqSubTypeStr = GetRequestSubType(requestSubType);
+            string reqUserCustomStr = GetRequestUserCustom(request);
+            // TODO: add handling to place the region in this request since its in multiple different locations depending on the request.
+            string fullRequest = ADDRESS + reqTypeStr + reqVersionStr + reqSubTypeStr + reqUserCustomStr;
+            return fullRequest;
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        private string GetRequestUserCustom(string request)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the request sub-type for the request we are building.
+        /// These distinguish which request we are calling.
+        /// </summary>
+        /// <param name="requestSubType"></param>
+        /// <returns>request sub-type string</returns>
+        private string GetRequestSubType(RequestSubType requestSubType)
+        {
+            string prefix = "get-";
+            string subType = string.Empty;
+            switch (requestSubType)
+            {
+                case RequestSubType.QUOTES:
+                    subType = "quotes";
+                    break;
+                case RequestSubType.WATCHLIST:
+                    subType = "watchlist-performance";
+                    break;
+                case RequestSubType.SUMMARY:
+                    subType = "summary";
+                    break;
+                case RequestSubType.CHARTS:
+                    subType = "charts";
+                    break;
+                case RequestSubType.PROFILE:
+                    subType = "profile";
+                    break;
+                case RequestSubType.EARNINGS:
+                    subType = "earnings";
+                    break;
+                case RequestSubType.ANALYSIS:
+                    subType = "analysis";
+                    break;
+                case RequestSubType.HISTORICAL:
+                    subType = "historical-data";
+                    break;
+                case RequestSubType.TRENDING:
+                    subType = "trending-tickers";
+                    break;
+                default:
+                    // Trending Tickers is default as it requires no custom parameters other than region.
+                    subType = "trending-tickers";
+                    break;
+            }
+            string fullSubType = prefix + subType + "?";
+            return fullSubType;
+        }
+
+        /// <summary>
+        /// Gets the request type for the request string we are building.
+        /// </summary>
+        /// <param name="requestType"></param>
+        /// <returns>request type string</returns>
+        public string GetRequestType(RequestType requestType)
+        {
+
+            switch (requestType)
+            {                
+                case RequestType.MARKET:
+                    return "market";
+                case RequestType.STOCK:
+                    return "stock";
+                case RequestType.NEWS:
+                    return "news";
+                default:
+                    return "market";
+            }
+        }
+
+        /// <summary>
+        /// Gets the request version for the request we are building.
+        /// </summary>
+        /// <param name="requestVersion"></param>
+        /// <returns>request version string</returns>
+        public string GetRequestVersion(RequestVersion requestVersion)
+        {
+            switch (requestVersion)
+            {
+                case RequestVersion.V1:
+                    return "v1";
+                case RequestVersion.V2:
+                    return "v2";
+                case RequestVersion.V3:
+                    return "v3";
+                case RequestVersion.NONE:                    
+                default:
+                    return "";
+            }
+        }
 
         /// <summary>
         /// TODO: Make generic request client for all Requests
@@ -28,13 +262,12 @@ namespace StockProfiler
         {
             var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/v2/get-quotes?symbols=MSFT%252CIBM%252CAAPL%252CTSLA%252CT%252CSCHW%252CFB%252CPG%252CMS%252CJNJ%252CSBUX&region=US");
             var request = new RestRequest(Method.GET);
-            request.AddHeader("x-rapidapi-host", RAPIDHOST);
-            request.AddHeader("x-rapidapi-key", RAPIDKEY);
+            request.AddHeader(HEADERHOST, RAPIDHOST);
+            request.AddHeader(HEADERKEY, RAPIDKEY);
             IRestResponse response = client.Execute(request);
             return response.Content;
         }
 
-        // TODO: Add more Rapid requests here
         // Charts
         public string RequestCharts()
         {

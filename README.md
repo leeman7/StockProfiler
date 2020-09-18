@@ -1,5 +1,4 @@
 # StockProfiler
-# Utility Scripts
 
 This is a stock profiler application
 

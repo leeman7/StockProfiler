@@ -42,6 +42,26 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[2.11.2, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.11.2, )"
+            },
+            "MongoDB.Driver.Core": {
+              "target": "Package",
+              "version": "[2.11.2, )"
+            },
+            "MongoDB.Driver.GridFS": {
+              "target": "Package",
+              "version": "[2.11.2, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.14.5, )"
+            },
             "RestClient": {
               "target": "Package",
               "version": "[3.0.0.21, )"
@@ -49,6 +69,18 @@
             "RestSharp": {
               "target": "Package",
               "version": "[106.11.4, )"
+            },
+            "StackExchange.Redis": {
+              "target": "Package",
+              "version": "[2.1.58, )"
+            },
+            "System.Diagnostics.EventLog": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
             }
           },
           "imports": [
