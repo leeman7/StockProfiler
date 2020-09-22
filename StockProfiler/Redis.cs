@@ -8,36 +8,45 @@ namespace StockProfiler
     public class Redis
     {
         private const string HOST = "localhost";
+        private static Lazy<ConnectionMultiplexer> redisClient;
+        public static ConnectionMultiplexer Connection => redisClient.Value;
+        public static IDatabase RedisCache => Connection.GetDatabase();
 
-        public Redis()
+        static Redis()
         {
-            redisClient = new Lazy<ConnectionMultiplexer>(() =>
+
+            ConfigurationOptions Options = new ConfigurationOptions
             {
-                return ConnectionMultiplexer.Connect(HOST);
+                EndPoints = { HOST }
+            };
+
+            redisClient = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(Options));
+        }
+
+        public void Subscribe()
+        {
+            ISubscriber subscriber = Connection.GetSubscriber();
+            subscriber.SubscribeAsync("messages", (channel, message) => {
+                Console.WriteLine(message);
             });
         }
 
-        private static Lazy<ConnectionMultiplexer> redisClient;
-
-        public static ConnectionMultiplexer  Connection
+        public static bool Save(List<Quote> quotes)
         {
-            get
-            {
-                return redisClient.Value;
-            }
-        }
-
-        public void Save(List<Quote> quotes)
-        {
-            var cache = Connection.GetDatabase();
+            bool isSuccess = false;
 
             foreach (var item in quotes)
             {
                 // TODO: Temporarily use UTC as a unique key value 
                 // TODO: Serialize the object and store it as a JSON formatted string
                 // Thoughts, need to find a better way than storing as JSON string that is similar to the Quote object.
-                cache.StringSet(DateTime.UtcNow.ToString(), item.ToString());
+                isSuccess = RedisCache.StringSet(DateTime.UtcNow.ToString(), item.ToString());
             }
+            return isSuccess;
+        }
+        private static string Get(string host, string key)
+        {
+            return RedisCache.StringGet(key);
         }
     }
 }

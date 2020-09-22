@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StockProfiler
 {
@@ -20,6 +21,29 @@ namespace StockProfiler
             }
             // Keep Program going
             Console.ReadLine();
+        }
+
+        public void Init()
+        {
+            Rapid rapidClient = new Rapid();            
+            Redis redisClient = new Redis();
+            Mongo mongoClient = new Mongo();
+            mongoClient.Init();
+            JsonHandler jsonHandler = new JsonHandler();
+        }
+
+        public void JunkTesting()
+        {
+            var redis = Redis.RedisCache;
+
+            if (redis.StringSet("testKey", "testValue"))
+            {
+                var val = redis.StringGet("testKey");
+                Console.WriteLine(val);
+            }
+
+            Mongo mongo = new Mongo();
+            mongo.Init();
         }
     }
 }

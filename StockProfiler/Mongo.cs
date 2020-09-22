@@ -13,23 +13,53 @@ namespace StockProfiler
     public class Mongo
     {
         private MongoClient mongoClient { get; set; }
+        public MongoClient MongoClient => mongoClient;
         IMongoDatabase MongoDatabase { get; set; }
         private const string HOST = "mongodb://localhost:27017";
+        public bool IsConnected { get; set; }
 
         public Mongo()
         {
-            mongoClient = new MongoClient();
-        }
-
-        public MongoClient MongoClient => mongoClient;
-
+            //mongoClient = new MongoClient();
+        }        
 
         public void Init()
         {
-            mongoClient = new MongoClient(HOST);
-            MongoDatabase = mongoClient.GetDatabase("");
-            var dbList = mongoClient.ListDatabases().ToList();
+            try
+            {
+                mongoClient = new MongoClient(HOST);
+                //mongoClient.Settings.ConnectionMode = ConnectionMode.Automatic;
+                //mongoClient.Settings.ConnectTimeout = new TimeSpan(0, 0, 0, 30);
+                
+                MongoDatabase = mongoClient.GetDatabase("test");
+                IsConnected = PingDatabase();
 
+                var dbList = mongoClient.ListDatabases().ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }            
+        }
+
+        public bool PingDatabase()
+        {
+            bool successfulConnection;
+            try
+            {
+                successfulConnection = MongoDatabase.RunCommandAsync((Command<BsonDocument>)"{ping:1}").Wait(1000);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                successfulConnection = MongoDatabase.RunCommandAsync((Command<BsonDocument>)"{ping:1}").Wait(1000);
+                // Reconnect logic
+                // Reconnect();
+            }
+            return successfulConnection;
         }
 
         public void InsertMany()
