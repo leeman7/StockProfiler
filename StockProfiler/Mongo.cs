@@ -20,14 +20,14 @@ namespace StockProfiler
 
         public Mongo()
         {
-            //mongoClient = new MongoClient();
+            mongoClient = new MongoClient(HOST);
         }        
 
         public void Init()
         {
             try
             {
-                mongoClient = new MongoClient(HOST);
+                
                 //mongoClient.Settings.ConnectionMode = ConnectionMode.Automatic;
                 //mongoClient.Settings.ConnectTimeout = new TimeSpan(0, 0, 0, 30);
                 

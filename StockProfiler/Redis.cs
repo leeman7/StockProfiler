@@ -31,7 +31,7 @@ namespace StockProfiler
             });
         }
 
-        public static bool Save(List<Quote> quotes)
+        public bool Save(List<Quote> quotes)
         {
             bool isSuccess = false;
 
@@ -44,7 +44,7 @@ namespace StockProfiler
             }
             return isSuccess;
         }
-        private static string Get(string host, string key)
+        private string Get(string host, string key)
         {
             return RedisCache.StringGet(key);
         }

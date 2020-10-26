@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MongoDB.Driver.Core.Operations;
 using RestSharp;
 
@@ -12,7 +13,10 @@ namespace StockProfiler
         private const string RAPIDHOST = "apidojo-yahoo-finance-v1.p.rapidapi.com";
         private const string RAPIDKEY = "dbf9709d05msh063e6dfc0a65f37p1e763ejsn155b8b59ced5";
         private const string ADDRESS = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/";
+        private const string USERID = "X3NJ2A7VDSABUI4URBWME2PZNM";
         public string[] WATCHLIST = { "MSFT", "AAPL", "FB", "TSLA", "JNJ", "PG", "T", "SCHW", "MS", "BRKB", "CSCO", "SBUX" };
+        // Special characters for creating custom request string. TODO: break out subsets and create handling for them leaving only necessary special characters.
+        public string[] SPECIAL = { "%252C", "%255E", "symbols=", "comparisons=", "&", "interval=", "pfId=", "userId=", "startDate=", "endDate=", "range=", "size=", "?" };
 
         /// <summary>
         /// Used to set the market region for the given request.
@@ -150,6 +154,20 @@ namespace StockProfiler
         /// <returns></returns>
         private string GetRequestUserCustom(string request)
         {
+            bool symbolsRequired = false;
+            string custom = string.Empty;
+
+            // Symbol string formatting
+            if (symbolsRequired)
+            {
+                string symbolStr = "symbols=";
+                foreach (var symbol in WATCHLIST)
+                {
+                    // %252C vs &
+                    symbolStr += symbol + (symbol != WATCHLIST.Last() ? SPECIAL[0] : SPECIAL[4]);
+                }
+            }
+
             throw new NotImplementedException();
         }
 
