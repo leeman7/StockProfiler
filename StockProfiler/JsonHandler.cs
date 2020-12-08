@@ -58,9 +58,15 @@ namespace StockProfiler
         public List<Quote> ProcessQuoteResponse(string response)
         {
             List<Quote> quotes = new List<Quote>();
-            Root entries = null;
-            entries = JsonConvert.DeserializeObject<Root>(response);
-            quotes = ParseQuote(entries);
+            try
+            {
+                Root entries = JsonConvert.DeserializeObject<Root>(response);
+                quotes = ParseQuote(entries);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception occurred in ProcessQuoteResponse: {ex}");
+            }
 
             return quotes;
         }
@@ -78,6 +84,7 @@ namespace StockProfiler
     }
     #endregion
 
+    #region JSON Objects
     public class Quote
     {
         public Quote()
@@ -109,5 +116,6 @@ namespace StockProfiler
         public int EarningsTimestamp { get; set; }
         public double FiftyDayAverage { get; set; }
         public double TwoHundredDayAverage { get; set; }
-    }    
+    }
+    #endregion
 }

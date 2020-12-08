@@ -22,20 +22,48 @@ namespace StockProfiler
             if (args.Length == 0)
             {
                 Console.WriteLine("Please enter an argument.");
-                Console.ReadLine();
+                Console.WriteLine("1 - Quotes");
+                Console.WriteLine("2 - Charts");
+                Console.WriteLine("3 - Watchlist");
+                Console.WriteLine("4 - Earnings");
+                Console.WriteLine("5 - Trending Stocks");
+                Console.WriteLine("6 - Historical Data");
+                Console.WriteLine("7 - Analysis");
+                Console.WriteLine("8 - Stock Summary");
+                Console.WriteLine("9 - Stock Profile");
+                var test = Console.ReadLine();
+
+                if (!int.TryParse(test, out int command))
+                {
+                    Console.WriteLine("Please enter a valid command: ");
+                    test = Console.ReadLine();
+                }
+
+                switch(command)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                    case 7:
+                        break;
+                    case 8:
+                        break;
+                    case 9:
+                        break;
+                    default:
+                        break;
+                       
+                }
             }
-
-            // TODO: Run timers in background to make requests.
-            // Create a timer with a ten second interval.
-            System.Timers.Timer aTimer;
-            aTimer = new System.Timers.Timer(10000);
-
-            // Hook up the Elapsed event for the timer.
-            aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-
-            // Set the Interval to 2 seconds (2000 milliseconds).
-            aTimer.Interval = 2000;
-            aTimer.Enabled = true;
 
             JsonHandler();
 
@@ -54,11 +82,9 @@ namespace StockProfiler
 
             // Open files for logging and output
             //FileHandler();
-        }
 
-        private static void OnTimedEvent(object source, ElapsedEventArgs elapsed)
-        {
-
+            var Poller = new Poller();
+            Poller.AlternatePoller();
         }
 
         private static void FileHandler()
@@ -100,7 +126,7 @@ namespace StockProfiler
             }
         }
 
-        public static void JsonHandler()
+        public static List<Quote> JsonHandler()
         {
             var rapid = new Rapid();
             JsonHandler jsonHandler = new JsonHandler();
@@ -113,6 +139,8 @@ namespace StockProfiler
             {
                 Console.WriteLine($"{item.Symbol}\r\n   Name: {item.ShortName}\r\n   Open: {item.RegularMarketOpen}");
             }
+
+            return quotes;
         }
 
         public void JunkTesting()

@@ -23,6 +23,9 @@ namespace StockProfiler
             redisClient = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(Options));
         }
 
+        /// <summary>
+        /// Subscribe Event
+        /// </summary>
         public void Subscribe()
         {
             ISubscriber subscriber = Connection.GetSubscriber();
@@ -31,6 +34,11 @@ namespace StockProfiler
             });
         }
 
+        /// <summary>
+        /// Save most current event to Redis cache for Delta processing.
+        /// </summary>
+        /// <param name="quotes"></param>
+        /// <returns></returns>
         public bool Save(List<Quote> quotes)
         {
             bool isSuccess = false;
@@ -41,9 +49,17 @@ namespace StockProfiler
                 // TODO: Serialize the object and store it as a JSON formatted string
                 // Thoughts, need to find a better way than storing as JSON string that is similar to the Quote object.
                 isSuccess = RedisCache.StringSet(DateTime.UtcNow.ToString(), item.ToString());
+                Console.WriteLine(item.ToString());
             }
             return isSuccess;
         }
+
+        /// <summary>
+        /// Get back previous events.
+        /// </summary>
+        /// <param name="host"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
         private string Get(string host, string key)
         {
             return RedisCache.StringGet(key);

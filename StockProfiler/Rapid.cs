@@ -91,44 +91,6 @@ namespace StockProfiler
         }
 
         /// <summary>
-        /// Get the region for the request we are building.
-        /// </summary>
-        /// <param name="region"></param>
-        /// <returns></returns>
-        public string GetRequestRegion(RequestRegion region)
-        {
-            switch (region)
-            {
-                case RequestRegion.US:
-                    return "US";
-                case RequestRegion.BR:
-                    return "BR";
-                case RequestRegion.AU:
-                    return "AU";
-                case RequestRegion.CA:
-                    return "CA";
-                case RequestRegion.FR:
-                    return "FR";
-                case RequestRegion.DE:
-                    return "DE";
-                case RequestRegion.HK:
-                    return "HK";
-                case RequestRegion.IN:
-                    return "IN";
-                case RequestRegion.IT:
-                    return "IT";
-                case RequestRegion.ES:
-                    return "ES";
-                case RequestRegion.GB:
-                    return "GB";
-                case RequestRegion.SG:
-                    return "SG";
-                default:
-                    return "US";
-            }
-        }
-
-        /// <summary>
         /// Generate the request string that will be sent to make the Rapid Request call.
         /// </summary>
         /// <param name="requestType"></param>
@@ -168,7 +130,32 @@ namespace StockProfiler
                 }
             }
 
-            throw new NotImplementedException();
+            return custom;
+        }
+
+        /// <summary>
+        /// Get the region for the request we are building.
+        /// </summary>
+        /// <param name="region"></param>
+        /// <returns></returns>
+        public string GetRequestRegion(RequestRegion region)
+        {
+            return region switch
+            {
+                RequestRegion.US => "US",
+                RequestRegion.BR => "BR",
+                RequestRegion.AU => "AU",
+                RequestRegion.CA => "CA",
+                RequestRegion.FR => "FR",
+                RequestRegion.DE => "DE",
+                RequestRegion.HK => "HK",
+                RequestRegion.IN => "IN",
+                RequestRegion.IT => "IT",
+                RequestRegion.ES => "ES",
+                RequestRegion.GB => "GB",
+                RequestRegion.SG => "SG",
+                _ => "US",
+            };
         }
 
         /// <summary>
@@ -180,41 +167,19 @@ namespace StockProfiler
         private string GetRequestSubType(RequestSubType requestSubType)
         {
             string prefix = "get-";
-            string subType = string.Empty;
-            switch (requestSubType)
+            string subType = requestSubType switch
             {
-                case RequestSubType.QUOTES:
-                    subType = "quotes";
-                    break;
-                case RequestSubType.WATCHLIST:
-                    subType = "watchlist-performance";
-                    break;
-                case RequestSubType.SUMMARY:
-                    subType = "summary";
-                    break;
-                case RequestSubType.CHARTS:
-                    subType = "charts";
-                    break;
-                case RequestSubType.PROFILE:
-                    subType = "profile";
-                    break;
-                case RequestSubType.EARNINGS:
-                    subType = "earnings";
-                    break;
-                case RequestSubType.ANALYSIS:
-                    subType = "analysis";
-                    break;
-                case RequestSubType.HISTORICAL:
-                    subType = "historical-data";
-                    break;
-                case RequestSubType.TRENDING:
-                    subType = "trending-tickers";
-                    break;
-                default:
-                    // Trending Tickers is default as it requires no custom parameters other than region.
-                    subType = "trending-tickers";
-                    break;
-            }
+                RequestSubType.QUOTES => "quotes",
+                RequestSubType.WATCHLIST => "watchlist-performance",
+                RequestSubType.SUMMARY => "summary",
+                RequestSubType.CHARTS => "charts",
+                RequestSubType.PROFILE => "profile",
+                RequestSubType.EARNINGS => "earnings",
+                RequestSubType.ANALYSIS => "analysis",
+                RequestSubType.HISTORICAL => "historical-data",
+                RequestSubType.TRENDING => "trending-tickers",
+                _ => "trending-tickers",// Trending Tickers is default as it requires no custom parameters other than region.
+            };
             string fullSubType = prefix + subType + "?";
             return fullSubType;
         }
@@ -226,18 +191,13 @@ namespace StockProfiler
         /// <returns>request type string</returns>
         public string GetRequestType(RequestType requestType)
         {
-
-            switch (requestType)
-            {                
-                case RequestType.MARKET:
-                    return "market";
-                case RequestType.STOCK:
-                    return "stock";
-                case RequestType.NEWS:
-                    return "news";
-                default:
-                    return "market";
-            }
+            return requestType switch
+            {
+                RequestType.MARKET => "market",
+                RequestType.STOCK => "stock",
+                RequestType.NEWS => "news",
+                _ => "market",
+            };
         }
 
         /// <summary>
@@ -247,18 +207,13 @@ namespace StockProfiler
         /// <returns>request version string</returns>
         public string GetRequestVersion(RequestVersion requestVersion)
         {
-            switch (requestVersion)
+            return requestVersion switch
             {
-                case RequestVersion.V1:
-                    return "v1";
-                case RequestVersion.V2:
-                    return "v2";
-                case RequestVersion.V3:
-                    return "v3";
-                case RequestVersion.NONE:                    
-                default:
-                    return "";
-            }
+                RequestVersion.V1 => "v1",
+                RequestVersion.V2 => "v2",
+                RequestVersion.V3 => "v3",
+                _ => "",
+            };
         }
 
         /// <summary>
@@ -291,8 +246,8 @@ namespace StockProfiler
         {
             var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-charts?region=US&comparisons=%255EGDAXI%252C%255EFCHI&symbol=HYDR.ME&interval=5m&range=1d");
             var request = new RestRequest(Method.GET);
-            request.AddHeader("x-rapidapi-host", RAPIDHOST);
-            request.AddHeader("x-rapidapi-key", RAPIDKEY);
+            request.AddHeader(HEADERHOST, RAPIDHOST);
+            request.AddHeader(HEADERKEY, RAPIDKEY);
             IRestResponse response = client.Execute(request);
             return response.Content;
         }
@@ -302,8 +257,8 @@ namespace StockProfiler
         {
             var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-watchlist-performance?region=US&symbols=%255EGSPC&pfId=the_berkshire_hathaway_portfolio&userId=X3NJ2A7VDSABUI4URBWME2PZNM");
             var request = new RestRequest(Method.GET);
-            request.AddHeader("x-rapidapi-host", RAPIDHOST);
-            request.AddHeader("x-rapidapi-key", RAPIDKEY);
+            request.AddHeader(HEADERHOST, RAPIDHOST);
+            request.AddHeader(HEADERKEY, RAPIDKEY);
             IRestResponse response = client.Execute(request);
             return response.Content;
         }
@@ -313,8 +268,8 @@ namespace StockProfiler
         {
             var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-earnings?size=10&region=US&startDate=1585155600000&endDate=1589475600000");
             var request = new RestRequest(Method.GET);
-            request.AddHeader("x-rapidapi-host", RAPIDHOST);
-            request.AddHeader("x-rapidapi-key", RAPIDKEY);
+            request.AddHeader(HEADERHOST, RAPIDHOST);
+            request.AddHeader(HEADERKEY, RAPIDKEY);
             IRestResponse response = client.Execute(request);
             return response.Content;
         }
@@ -324,8 +279,8 @@ namespace StockProfiler
         {
             var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-trending-tickers?region=US");
             var request = new RestRequest(Method.GET);
-            request.AddHeader("x-rapidapi-host", RAPIDHOST);
-            request.AddHeader("x-rapidapi-key", RAPIDKEY);
+            request.AddHeader(HEADERHOST, RAPIDHOST);
+            request.AddHeader(HEADERKEY, RAPIDKEY);
             IRestResponse response = client.Execute(request);
             return response.Content;
         }
@@ -336,8 +291,8 @@ namespace StockProfiler
         {
             var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v3/get-historical-data?region=US&symbol=AMRN");
             var request = new RestRequest(Method.GET);
-            request.AddHeader("x-rapidapi-host", RAPIDHOST);
-            request.AddHeader("x-rapidapi-key", RAPIDKEY);
+            request.AddHeader(HEADERHOST, RAPIDHOST);
+            request.AddHeader(HEADERKEY, RAPIDKEY);
             IRestResponse response = client.Execute(request);
             return response.Content;
         }
@@ -347,8 +302,8 @@ namespace StockProfiler
         {
             var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-analysis?region=US&symbol=AMRN");
             var request = new RestRequest(Method.GET);
-            request.AddHeader("x-rapidapi-host", RAPIDHOST);
-            request.AddHeader("x-rapidapi-key", RAPIDKEY);
+            request.AddHeader(HEADERHOST, RAPIDHOST);
+            request.AddHeader(HEADERKEY, RAPIDKEY);
             IRestResponse response = client.Execute(request);
             return response.Content;
         }
@@ -358,8 +313,8 @@ namespace StockProfiler
         {
             var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?region=US&symbol=AMRN");
             var request = new RestRequest(Method.GET);
-            request.AddHeader("x-rapidapi-host", RAPIDHOST);
-            request.AddHeader("x-rapidapi-key", RAPIDKEY);
+            request.AddHeader(HEADERHOST, RAPIDHOST);
+            request.AddHeader(HEADERKEY, RAPIDKEY);
             IRestResponse response = client.Execute(request);
             return response.Content;
         }
@@ -369,13 +324,12 @@ namespace StockProfiler
         {
             var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-profile?region=US&symbol=AMRN");
             var request = new RestRequest(Method.GET);
-            request.AddHeader("x-rapidapi-host", RAPIDHOST);
-            request.AddHeader("x-rapidapi-key", RAPIDKEY);
+            request.AddHeader(HEADERHOST, RAPIDHOST);
+            request.AddHeader(HEADERKEY, RAPIDKEY);
             IRestResponse response = client.Execute(request);
             return response.Content;
         }
 
         #endregion
-
     }
 }
