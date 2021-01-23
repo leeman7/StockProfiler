@@ -9,55 +9,134 @@ namespace StockProfiler
 {
     public class Poller
     {
-        public void Poll()
+        private System.Timers.Timer pollTimer { get; set; }
+        public System.Timers.Timer PollTimer => pollTimer;
+
+        public enum EventHandlerType
         {
-            int delay = 3000;
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            CancellationToken token = cancellationTokenSource.Token;
-            Task listener = Task.Factory.StartNew(() =>
+            Generic,
+            Connections,
+            Requests
+        }
+
+        public Poller()
+        {
+
+        }
+
+        public Poller(EventHandlerType eventType, int timer, int interval)
+        {
+            pollTimer = new System.Timers.Timer(timer);
+            pollTimer.Elapsed += SetEventHandler(eventType);
+            pollTimer.Interval = interval;
+            pollTimer.Enabled = true;            
+        }
+
+        /// <summary>
+        /// Determines the EventHandler route based on the EvenType passed to it. 
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <returns>EventHandler delegate</returns>
+        public ElapsedEventHandler SetEventHandler(EventHandlerType eventType)
+        {
+            
+            switch (eventType)
             {
-                while (true)
-                {
-                    // poll hardware
-                    TestPoll();
-                    Thread.Sleep(delay);
-                    if (token.IsCancellationRequested)
-                        break;
-                }
-
-                // cleanup, e.g. close connection
-            }, token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+                case EventHandlerType.Generic:
+                    return new ElapsedEventHandler(PollGenericEvent);
+                case EventHandlerType.Connections:
+                    return new ElapsedEventHandler(PollConnectionEvent);
+                case EventHandlerType.Requests:
+                    return new ElapsedEventHandler(PollRequestEvent);
+                default:
+                    return new ElapsedEventHandler(PollGenericEvent);
+            }
         }
 
-        public void TestPoll()
+        /// <summary>
+        /// Creates a new Poller. Might get rid of this now that we have constructors
+        /// </summary>
+        /// <param name="timer"></param>
+        /// <param name="interval"></param>
+        public void CreatePoller(int timer, int interval)
         {
-            Console.WriteLine("Test Polling");
-        }
-
-        public void AlternatePoller()
-        {
-            // TODO: Run timers in background to make requests.
-            // Create a timer with a ten second interval.
-            System.Timers.Timer aTimer;
-            aTimer = new System.Timers.Timer(60000);
+            // Create a timer.
+            pollTimer = new System.Timers.Timer(timer); // timer
 
             // Hook up the Elapsed event for the timer.
-            aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            pollTimer.Elapsed += new ElapsedEventHandler(PollGenericEvent);
 
-            // Set the Interval to 2 seconds (2000 milliseconds).
-            aTimer.Interval = 30000;
-            aTimer.Enabled = true;
+            // Set the Interval in milliseconds.
+            pollTimer.Interval = interval; // interval goes here
+            pollTimer.Enabled = true;
         }
 
-        private void OnTimedEvent(object sender, ElapsedEventArgs e)
+        /// <summary>
+        /// Stops a running Poll until started again.
+        /// </summary>
+        /// <returns></returns>
+        public bool StopPoller()
+        {
+            bool stopped = false;
+            pollTimer.Stop();
+            if (pollTimer.Enabled)
+            {
+                Logger.Log(LogTarget.File, $"{pollTimer.GetHashCode()}: {pollTimer.SynchronizingObject} Poller STOPPED");
+                stopped = true;
+            }
+            return stopped;
+        }
+
+        /// <summary>
+        /// Starts a stopped Poll.
+        /// </summary>
+        /// <returns></returns>
+        public bool StartPoller()
+        {
+            bool started = false;
+            pollTimer.Start();
+            if (!pollTimer.Enabled)
+            {
+                Logger.Log(LogTarget.File, $"{pollTimer.GetHashCode()}: {pollTimer.SynchronizingObject} Poller STARTED");
+                started = true;
+            }
+            return started;
+        }
+
+        /// <summary>
+        /// Main application Polling event. Should display/log generic stuff.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PollGenericEvent(object sender, ElapsedEventArgs e)
         {
             Console.WriteLine($"Timed Event: ");
-            var quotes = Program.JsonHandler();
+            //var quotes = Program.JsonHandler();
+        }
 
-            #if false
+        /// <summary>
+        /// For Polling external service connections are still connected.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PollConnectionEvent(object sender, ElapsedEventArgs e)
+        {
+            Program.MongoClient.IsConnected = Program.MongoClient.PingDatabase();
+            Program.RedisClient.IsConnected = Program.RedisClient.TestConnection();
+        }
+
+        /// <summary>
+        /// Polls to execute Rapid requests and save data to the cache and DB.
+        /// Priority: Rapid >> Redis >> MongoDB
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PollRequestEvent(object sender, ElapsedEventArgs e)
+        {
+            Console.WriteLine($"Timed Event: ");
+            var quotes = Program.ProcessJSONRequest();
             Program.RedisClient.Save(quotes);
             Program.MongoClient.InsertMany();
-            #endif
         }
     }
 }

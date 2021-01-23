@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace StockProfiler
 {
-    public class Logger
-    {
-        
-    }
-
     public enum LogTarget
     {
         File, Database, EventLog
@@ -24,15 +20,38 @@ namespace StockProfiler
 
     public class FileLogger : LogBase
     {
-        public string filePath = @"C:\StockProfiler.txt";
+        string filePath = @"..\Logs\StockProfiler-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DateTime.Today.Year + ".txt";
         public override void Log(string message)
         {
             lock (lockObj)
             {
-                using (StreamWriter streamWriter = new StreamWriter(filePath))
+                using (StreamWriter streamWriter = File.AppendText(filePath))
                 {
                     streamWriter.WriteLine(message);
                 }
+            }
+        }
+
+        public void LogAll(string message)
+        {
+            lock (lockObj)
+            {
+                using (StreamWriter streamWriter = File.AppendText(filePath))
+                {
+                    streamWriter.WriteLine(message);
+                }
+            }
+        }
+    }
+
+    public class MongoDBLogger : LogBase
+    {
+        string connectionString = string.Empty;
+        public override void Log(string message)
+        {
+            lock (lockObj)
+            {
+                //Code to log data to the database
             }
         }
     }
@@ -46,6 +65,75 @@ namespace StockProfiler
                 EventLog eventLog = new EventLog();
                 eventLog.Source = "StockProfiler";
                 eventLog.WriteEntry(message);
+            }
+        }
+    }
+
+    public static class Logger
+    {
+        private static LogBase logger = null;
+        public static void Log(LogTarget target, string message)
+        {
+            switch (target)
+            {
+                case LogTarget.File:
+                    logger = new FileLogger();
+                    logger.Log(message);
+                    break;
+                case LogTarget.Database:
+                    logger = new MongoDBLogger();
+                    logger.Log(message);
+                    break;
+                case LogTarget.EventLog:
+                    logger = new EventLogger();
+                    logger.Log(message);
+                    break;
+                default:
+                    return;
+            }
+        }
+
+        private static void ValidatePath(string path)
+        {
+            try
+            {
+                DirectoryInfo directory = new DirectoryInfo(path);
+                if (!directory.Exists)
+                    directory.Create();
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private static void ValidateFile(string filePath)
+        {
+            try
+            {
+                if (!File.Exists(filePath))
+                    File.Create(filePath);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// Open and or Create a new log file for the day.
+        /// </summary>
+        public static void LogFileHelper()
+        {
+            try
+            {
+                //TODO: Remove strings later and replace with config settings to set the path file.
+                string path = @"..\Logs\";
+                string filePath = path + @"StockProfiler-" + DateTime.Today.ToShortDateString() + ".txt";                
+                ValidatePath(path);
+                ValidateFile(filePath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex}");
             }
         }
     }

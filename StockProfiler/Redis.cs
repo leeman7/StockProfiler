@@ -11,6 +11,7 @@ namespace StockProfiler
         private static Lazy<ConnectionMultiplexer> redisClient;
         public static ConnectionMultiplexer Connection => redisClient.Value;
         public static IDatabase RedisCache => Connection.GetDatabase();
+        public bool IsConnected { get; set; }
 
         static Redis()
         {
@@ -21,6 +22,32 @@ namespace StockProfiler
             };
 
             redisClient = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(Options));
+        }
+
+        public bool TestConnection()
+        {
+            return IsConnected = Connection.IsConnected;
+        }
+
+        /// <summary>
+        /// Reconnect logic
+        /// </summary>
+        public void Reconnect()
+        {
+            try
+            {
+                // TODO: make this a timer the stop after 30 seconds of failure then retry every 2 mins and continue.
+                while (!TestConnection())
+                {
+                    Connection.Close();
+                    ConfigurationOptions Options = new ConfigurationOptions { EndPoints = { HOST } };
+                    redisClient = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(Options));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         /// <summary>

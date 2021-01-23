@@ -12,7 +12,10 @@ namespace StockProfiler
     {
         public static Mongo MongoClient { get; set; }
         public static Redis RedisClient { get; set; }
-        
+        public static Rapid RapidInstance { get; set; }
+        public static JsonHandler JSONHandler { get; set; }
+        public static Poller GenericPoll { get; set; }
+
         static void Main(string[] args)
         {
             // Init block
@@ -21,25 +24,24 @@ namespace StockProfiler
             // TODO: Logic for parsing commands
             if (args.Length == 0)
             {
-                Console.WriteLine("Please enter an argument.");
-                Console.WriteLine("1 - Quotes");
-                Console.WriteLine("2 - Charts");
-                Console.WriteLine("3 - Watchlist");
-                Console.WriteLine("4 - Earnings");
-                Console.WriteLine("5 - Trending Stocks");
-                Console.WriteLine("6 - Historical Data");
-                Console.WriteLine("7 - Analysis");
-                Console.WriteLine("8 - Stock Summary");
-                Console.WriteLine("9 - Stock Profile");
-                var test = Console.ReadLine();
+                DisplayPromptOptions();
+                var command = GetOption();
+                ProcessCommandOption(command);
 
-                if (!int.TryParse(test, out int command))
-                {
-                    Console.WriteLine("Please enter a valid command: ");
-                    test = Console.ReadLine();
-                }
+            }
 
-                switch(command)
+            ProcessJSONRequest();
+
+            // Keep Program going
+            Console.ReadLine();
+        }
+
+        private static void ProcessCommandOption(int command)
+        {
+            bool successful;
+            try
+            {
+                switch (command)
                 {
                     case 1:
                         break;
@@ -61,18 +63,51 @@ namespace StockProfiler
                         break;
                     default:
                         break;
-                       
+
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
 
-            JsonHandler();
+        private static int GetOption()
+        {
+            var option = Console.ReadLine();
+            int command;
 
-            // Keep Program going
-            Console.ReadLine();
+            while (!int.TryParse(option, out command))
+            {
+                Console.WriteLine("Please enter a valid command: ");
+                option = Console.ReadLine();
+            }
+
+            return command;
+        }
+
+        private static void DisplayPromptOptions()
+        {
+            Console.WriteLine("========OPTIONS========");
+            Console.WriteLine("1 - Quotes");
+            Console.WriteLine("2 - Charts");
+            Console.WriteLine("3 - Watchlist");
+            Console.WriteLine("4 - Earnings");
+            Console.WriteLine("5 - Trending Stocks");
+            Console.WriteLine("6 - Historical Data");
+            Console.WriteLine("7 - Analysis");
+            Console.WriteLine("8 - Stock Summary");
+            Console.WriteLine("9 - Stock Profile");            
         }
 
         public static void Init()
         {
+            // Open files for logging and output
+            Logger.LogFileHelper();
+
+            // Create and start Main application event Poller.
+            GenericPoll = new Poller(Poller.EventHandlerType.Generic, 60000, 30000);
+
             // Redis client only needs instance for actions
             RedisClient = new Redis();            
 
@@ -80,69 +115,33 @@ namespace StockProfiler
             MongoClient = new Mongo();
             MongoClient.Init();
 
-            // Open files for logging and output
-            //FileHandler();
-
-            var Poller = new Poller();
-            Poller.AlternatePoller();
+            RapidInstance = new Rapid();
+            JSONHandler = new JsonHandler();
         }
 
-        private static void FileHandler()
+        /// <summary>
+        /// Handles JSON strings and logs output to command window.
+        /// </summary>
+        /// <returns>List of Quotes Objects</returns>
+        public static List<Quote> ProcessJSONRequest()
         {
-            try
-            {
-                string path = @"C:\Users\Leema\source\repos\StockProfiler\StockProfiler\Logs\stocks" + DateTime.Today.ToShortDateString() + ".txt";
-                if (!File.Exists(path))
-                {
-                    File.Create(path);
-                }
-                else
-                {
-                    var wh = new AutoResetEvent(false);
-                    var fsw = new FileSystemWatcher(".");
-                    fsw.Filter = "file-to-read";
-                    fsw.EnableRaisingEvents = true;
-                    fsw.Changed += (s, e) => wh.Set();
-
-                    var fs = new FileStream("file-to-read", FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
-                    using (var sr = new StreamWriter(fs))
-                    {
-                        var s = "";
-                        while (true)
-                        {                            
-                            if (s != null)
-                                sr.WriteLine(s);
-                            else
-                                wh.WaitOne(1000);
-                        }
-                    }
-
-                    wh.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"{ex}");
-            }
-        }
-
-        public static List<Quote> JsonHandler()
-        {
-            var rapid = new Rapid();
-            JsonHandler jsonHandler = new JsonHandler();
-            var response = rapid.RequestQuote();
-            List<Quote> quotes = jsonHandler.ProcessQuoteResponse(response);
+            var response = RapidInstance.RequestQuote();
+            List<Quote> quotes = JSONHandler.ProcessQuoteResponse(response);
 
             // Display Watchlist
             Console.WriteLine("Watchlist Profile");
             foreach (var item in quotes)
             {
                 Console.WriteLine($"{item.Symbol}\r\n   Name: {item.ShortName}\r\n   Open: {item.RegularMarketOpen}");
+                Logger.Log(LogTarget.File, $"{item.Symbol}\r\n   Name: {item.ShortName}\r\n   Open: {item.RegularMarketOpen}");
             }
 
             return quotes;
         }
 
+        /// <summary>
+        /// Testing Redis connection
+        /// </summary>
         public void JunkTesting()
         {
             var redis = Redis.RedisCache;
@@ -152,9 +151,6 @@ namespace StockProfiler
                 var val = redis.StringGet("testKey");
                 Console.WriteLine(val);
             }
-
-            Mongo mongo = new Mongo();
-            mongo.Init();
         }
     }
 }

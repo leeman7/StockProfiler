@@ -3,6 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <StartupObject>StockProfiler.Program</StartupObject>
+    <ApplicationIcon>letter-s-logo-icon_9880-8.ico.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

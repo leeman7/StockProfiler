@@ -18,11 +18,16 @@ namespace StockProfiler
         private const string HOST = "mongodb://localhost:27017";
         public bool IsConnected { get; set; }
 
+        public delegate void CheckConnection(bool b);
+
         public Mongo()
         {
             mongoClient = new MongoClient(HOST);
         }        
 
+        /// <summary>
+        /// MongoDB Init that pings the Database
+        /// </summary>
         public void Init()
         {
             try
