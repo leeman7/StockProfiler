@@ -19,12 +19,15 @@ C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\M
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\Moq.xml
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\System.Threading.Tasks.Extensions.xml
-C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\xunit.abstractions.xml
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\xunit.assert.xml
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\xunit.core.xml
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\xunit.execution.desktop.xml
-C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\obj\Debug\StockProfilerTests.csprojAssemblyReference.cache
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\obj\Debug\StockProfilerTests.csproj.CoreCompileInputs.cache
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\obj\Debug\StockProfilerTests.csproj.CopyComplete
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\obj\Debug\StockProfilerTests.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\obj\Debug\StockProfilerTests.pdb
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\xunit.runner.visualstudio.testadapter.dll
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\xunit.runner.reporters.net452.dll
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\xunit.runner.utility.net452.dll
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\bin\Debug\StockProfilerTests.dll.config
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfilerTests\obj\Debug\StockProfilerTests.csprojAssemblyReference.cache
