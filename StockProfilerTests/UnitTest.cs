@@ -9,6 +9,13 @@ namespace StockProfilerTests
         [Fact]
         public void StartUpTest()
         {
+            Assert.True(true);
+        }
+
+        [Fact]
+        public void Test()
+        {
+            Assert.True(true);
         }
     }
 }

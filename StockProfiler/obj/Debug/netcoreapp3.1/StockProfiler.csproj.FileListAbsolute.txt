@@ -42,7 +42,6 @@ C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcor
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\RestClient.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\RestSharp.dll
-C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcoreapp3.1\StockProfiler.csprojAssemblyReference.cache
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcoreapp3.1\StockProfiler.AssemblyInfoInputs.cache
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcoreapp3.1\StockProfiler.AssemblyInfo.cs
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcoreapp3.1\StockProfiler.csproj.CopyComplete

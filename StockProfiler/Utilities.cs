@@ -7,14 +7,18 @@ namespace StockProfiler
     public class Utilities
     {
 
-        // Schedule
-
-        // DateTime converter
+        // Schedule Timer
 
         // DateTime Schedule check
 
-        // File Handler
+        // DateTime converter
 
-        // Calculate stock change
+        // Message and Log formatting
+
+        // File Handler Rotater
+
+        // CSV and Table file generator
+
+        // Stock Merge Delta
     }
 }
