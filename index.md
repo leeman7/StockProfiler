@@ -17,7 +17,7 @@ To use this application you will need to install Redis Server and MongoDB. Both 
 Redis - Used as intermediary cache storage for data Ubuntu Windows
 MongoDB - Used as primary storage of data
 
-###Installing
+### Installing
 A step by step series of examples that tell you how to get a development env running. This should be straight forward after setting up the Prerequisites, as no futher setup is needed other than downloading and configuring you service connections.
 
 Git:
