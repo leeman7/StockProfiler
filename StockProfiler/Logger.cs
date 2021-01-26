@@ -9,7 +9,11 @@ namespace StockProfiler
 {
     public enum LogTarget
     {
-        File, Database, EventLog
+        File,
+        Database,
+        Cache,
+        EventLog,
+        Exception
     }
 
     public abstract class LogBase
@@ -20,23 +24,24 @@ namespace StockProfiler
 
     public class FileLogger : LogBase
     {
-        string filePath = @"..\Logs\StockProfiler-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DateTime.Today.Year + ".txt";
+        string logPath = @"..\Logs\StockProfiler-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DateTime.Today.Year + ".txt";
         public override void Log(string message)
         {
             lock (lockObj)
             {
-                using (StreamWriter streamWriter = File.AppendText(filePath))
-                {
-                    streamWriter.WriteLine(message);
+                using (StreamWriter streamWriter = File.AppendText(logPath))
+                {                   
+                    streamWriter.WriteLine($"{message}");
                 }
             }
         }
+
 
         public void LogAll(string message)
         {
             lock (lockObj)
             {
-                using (StreamWriter streamWriter = File.AppendText(filePath))
+                using (StreamWriter streamWriter = File.AppendText(logPath))
                 {
                     streamWriter.WriteLine(message);
                 }
@@ -45,6 +50,18 @@ namespace StockProfiler
     }
 
     public class MongoDBLogger : LogBase
+    {
+        string connectionString = string.Empty;
+        public override void Log(string message)
+        {
+            lock (lockObj)
+            {
+                //Code to log data to the database
+            }
+        }
+    }
+
+    public class CacheLogger : LogBase
     {
         string connectionString = string.Empty;
         public override void Log(string message)
@@ -69,6 +86,21 @@ namespace StockProfiler
         }
     }
 
+    public class ExceptionLogger : LogBase
+    {
+        string exceptionPath = @"..\Logs\ExceptionLog-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DateTime.Today.Year + ".txt";
+        public override void Log(string message)
+        {
+            lock (lockObj)
+            {
+                using (StreamWriter streamWriter = File.AppendText(exceptionPath))
+                {
+                    streamWriter.WriteLine(message);
+                }
+            }
+        }
+    }
+
     public static class Logger
     {
         private static LogBase logger = null;
@@ -88,11 +120,23 @@ namespace StockProfiler
                     logger = new EventLogger();
                     logger.Log(message);
                     break;
+                case LogTarget.Exception:
+                    logger = new ExceptionLogger();
+                    logger.Log(message);
+                    break;
+                case LogTarget.Cache:
+                    logger = new CacheLogger();
+                    logger.Log(message);
+                    break;
                 default:
                     return;
             }
         }
 
+        /// <summary>
+        /// Validate the path file directory provided.
+        /// </summary>
+        /// <param name="path"></param>
         private static void ValidatePath(string path)
         {
             try
@@ -101,11 +145,16 @@ namespace StockProfiler
                 if (!directory.Exists)
                     directory.Create();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log(LogTarget.Exception, path + $"{ex}");
             }
         }
 
+        /// <summary>
+        /// Validate the file path for the log file provided.
+        /// </summary>
+        /// <param name="filePath"></param>
         private static void ValidateFile(string filePath)
         {
             try
@@ -113,8 +162,9 @@ namespace StockProfiler
                 if (!File.Exists(filePath))
                     File.Create(filePath);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log(LogTarget.Exception, filePath + $"{ex}");
             }
         }
 
@@ -127,13 +177,15 @@ namespace StockProfiler
             {
                 //TODO: Remove strings later and replace with config settings to set the path file.
                 string path = @"..\Logs\";
-                string filePath = path + @"StockProfiler-" + DateTime.Today.ToShortDateString() + ".txt";                
+                string filePath = path + @"\StockProfiler-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DateTime.Today.Year + ".txt";
                 ValidatePath(path);
                 ValidateFile(filePath);
+                Log(LogTarget.File, $"{filePath} Generated");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"{ex}");
+                Log(LogTarget.Exception, $"{ex}");
             }
         }
     }

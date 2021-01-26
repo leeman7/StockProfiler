@@ -21,9 +21,14 @@ namespace StockProfiler
 
         public Poller()
         {
-
         }
 
+        /// <summary>
+        /// Poller alternate Constructor.
+        /// </summary>
+        /// <param name="eventType">Type of Event from above enums</param>
+        /// <param name="timer">how long timer should last</param>
+        /// <param name="interval">interval in which to check</param>
         public Poller(EventHandlerType eventType, int timer, int interval)
         {
             pollTimer = new System.Timers.Timer(timer);
@@ -56,8 +61,8 @@ namespace StockProfiler
         /// <summary>
         /// Creates a new Poller. Might get rid of this now that we have constructors
         /// </summary>
-        /// <param name="timer"></param>
-        /// <param name="interval"></param>
+        /// <param name="timer">Time the timer lasts</param>
+        /// <param name="interval">Interval in which the timer checks</param>
         public void CreatePoller(int timer, int interval)
         {
             // Create a timer.
@@ -74,7 +79,7 @@ namespace StockProfiler
         /// <summary>
         /// Stops a running Poll until started again.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true if stopped</returns>
         public bool StopPoller()
         {
             bool stopped = false;
