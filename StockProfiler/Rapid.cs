@@ -217,13 +217,27 @@ namespace StockProfiler
         }
 
         /// <summary>
-        /// TODO: Make generic request client for all Requests
+        /// Make generic request client for all Requests
         /// </summary>
         /// <returns></returns>
-        public RestClient RequestClient()
+        public RestClient RequestClient(string request)
         {
-            var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/v2/get-quotes?symbols=MSFT%252CIBM%252CAAPL%252CTSLA%252CT%252CSCHW%252CFB%252CPG%252CMS%252CJNJ%252CSBUX&region=US");
+            RestClient client = new RestClient(request);
             return client;
+        }
+
+        /// <summary>
+        /// Make a generic request for all Requests
+        /// </summary>
+        /// <param name="restClient"></param>
+        /// <returns></returns>
+        public string SendRequest(RestClient restClient)
+        {
+            RestRequest request = new RestRequest(Method.GET);
+            request.AddHeader(HEADERHOST, RAPIDHOST);
+            request.AddHeader(HEADERKEY, RAPIDKEY);
+            IRestResponse response = restClient.Execute(request);
+            return response.Content;
         }
 
         #region Rapid Requests

@@ -12,10 +12,11 @@ namespace StockProfiler
 {
     public class Mongo
     {
+        private const string HOST = "mongodb://localhost:27017";
+        private const string DATABASE = "StockProfiler";
         private MongoClient mongoClient { get; set; }
         public MongoClient MongoClient => mongoClient;
-        IMongoDatabase MongoDatabase { get; set; }
-        private const string HOST = "mongodb://localhost:27017";
+        IMongoDatabase MongoDatabase { get; set; }        
         public bool IsConnected { get; set; }
 
         public delegate void CheckConnection(bool b);
@@ -32,10 +33,11 @@ namespace StockProfiler
         {
             try
             {
-                
                 //mongoClient.Settings.ConnectionMode = ConnectionMode.Automatic;
                 //mongoClient.Settings.ConnectTimeout = new TimeSpan(0, 0, 0, 30);
-                
+#if false
+                MongoDatabase = mongoClient.GetDatabase("DATABASE");
+#endif
                 MongoDatabase = mongoClient.GetDatabase("test");
                 IsConnected = PingDatabase();
 
@@ -47,6 +49,10 @@ namespace StockProfiler
             }            
         }
 
+        /// <summary>
+        /// Ping the Mongo Database to make sure its still up and we are connected.
+        /// </summary>
+        /// <returns>true if successful</returns>
         public bool PingDatabase()
         {
             bool successfulConnection;
@@ -67,14 +73,28 @@ namespace StockProfiler
             return successfulConnection;
         }
 
+        /// <summary>
+        /// Insert multiple entries into the MongoDB. Mostly for the Watchlist.
+        /// </summary>
         public void InsertMany()
         {
-            var entity = new MongoQuote { Name = "MSFT" };
-            List<MongoQuote> mongoQuotes = new List<MongoQuote>();
-            var collection = MongoDatabase.GetCollection<MongoQuote>("watchlist");
-            collection.InsertMany(mongoQuotes);
+            try
+            {
+                var entity = new MongoQuote { Name = "MSFT" };
+                List<MongoQuote> mongoQuotes = new List<MongoQuote>();
+                var collection = MongoDatabase.GetCollection<MongoQuote>("watchlist");
+                collection.InsertMany(mongoQuotes);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(LogTarget.Exception, $"{ex}");
+                throw;
+            }
         }
 
+        /// <summary>
+        /// Finds an entry in the MongoDB. Not sure if I need this if I intend to convert them to CSV files.
+        /// </summary>
         public async void Find()
         {
             var collection = MongoDatabase.GetCollection<MongoQuote>("watchlist");
@@ -83,6 +103,12 @@ namespace StockProfiler
             //List<MongoQuote> query = collection.AsQueryable<MongoQuote>().Where<Entity>()
         }
 
+        /// <summary>
+        /// Used to update an entry within the MongoDB. 
+        /// Not sure if needed since for most instances we take in what we get.
+        /// </summary>
+        /// <param name="field">Field to be updated</param>
+        /// <param name="quote">Quote object for reference</param>
         public async void Update(string field, Quote quote)
         {
             var collection = MongoDatabase.GetCollection<BsonDocument>("watchlist");

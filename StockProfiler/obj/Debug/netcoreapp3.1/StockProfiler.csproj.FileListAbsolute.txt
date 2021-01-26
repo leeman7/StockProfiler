@@ -61,7 +61,6 @@ C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcor
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\snappy64.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\libzstd.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\MongoDB.Driver.GridFS.dll
-C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\Pipelines.Sockets.Unofficial.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\StackExchange.Redis.dll
@@ -69,10 +68,8 @@ C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcor
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\System.Diagnostics.PerformanceCounter.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\System.Drawing.Common.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\System.IO.Pipelines.dll
-C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\System.Runtime.CompilerServices.Unsafe.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\System.Security.Permissions.dll
-C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\System.Threading.Channels.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\System.Windows.Extensions.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.PerformanceCounter.dll
@@ -89,3 +86,11 @@ C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcor
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\xunit.core.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\xunit.execution.dotnet.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcoreapp3.1\StockProfiler.csproj.CoreCompileInputs.cache
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\Microsoft.Win32.Registry.dll
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\System.Security.AccessControl.dll
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\System.Security.Principal.Windows.dll
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\Microsoft.Win32.Registry.dll
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Security.AccessControl.dll
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Security.Principal.Windows.dll
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Security.Principal.Windows.dll
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcoreapp3.1\StockProfiler.csprojAssemblyReference.cache

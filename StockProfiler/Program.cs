@@ -36,6 +36,10 @@ namespace StockProfiler
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// Process the option provided by the client.
+        /// </summary>
+        /// <param name="command"></param>
         private static void ProcessCommandOption(int command)
         {
             bool successful;
@@ -43,23 +47,24 @@ namespace StockProfiler
             {
                 switch (command)
                 {
-                    case 1:
+                    case 1: // Quotes
+
                         break;
-                    case 2:
+                    case 2: // Charts
                         break;
-                    case 3:
+                    case 3: // Watchlist
                         break;
-                    case 4:
+                    case 4: // Earnings
                         break;
-                    case 5:
+                    case 5: // Trending Stocks
                         break;
-                    case 6:
+                    case 6: // Historical Data
                         break;
-                    case 7:
+                    case 7: // Analysis
                         break;
-                    case 8:
+                    case 8: // Stock Summary
                         break;
-                    case 9:
+                    case 9: // Stock Profile
                         break;
                     default:
                         break;
@@ -68,10 +73,14 @@ namespace StockProfiler
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Logger.Log(LogTarget.Exception, $"{ex}");
             }
         }
 
+        /// <summary>
+        /// Gets the options provided by the client.
+        /// </summary>
+        /// <returns></returns>
         private static int GetOption()
         {
             var option = Console.ReadLine();
@@ -86,6 +95,9 @@ namespace StockProfiler
             return command;
         }
 
+        /// <summary>
+        /// Options display. To be displayed to the client upon launching the applications.
+        /// </summary>
         private static void DisplayPromptOptions()
         {
             Console.WriteLine("========OPTIONS========");

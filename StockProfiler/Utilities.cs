@@ -12,6 +12,10 @@ namespace StockProfiler
         // DateTime Schedule check
 
         // DateTime converter
+        public string DateTimeLogFormat()
+        {
+            return DateTime.Today.ToUniversalTime().ToLocalTime().ToString() + ">  ";
+        }
 
         // Message and Log formatting
 
