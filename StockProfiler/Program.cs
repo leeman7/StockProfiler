@@ -27,10 +27,12 @@ namespace StockProfiler
                 DisplayPromptOptions();
                 var command = GetOption();
                 ProcessCommandOption(command);
+                //TODO: Determine Request logic here
 
             }
 
             ProcessJSONRequest();
+            ProcessWatchlistRequest();
 
             // Keep Program going
             Console.ReadLine();
@@ -42,33 +44,40 @@ namespace StockProfiler
         /// <param name="command"></param>
         private static void ProcessCommandOption(int command)
         {
-            bool successful;
             try
             {
                 switch (command)
                 {
                     case 1: // Quotes
-
+                        Logger.Log(LogTarget.File, $"Quote Selected");
                         break;
                     case 2: // Charts
+                        Logger.Log(LogTarget.File, $"Charts Selected");
                         break;
                     case 3: // Watchlist
+                        Logger.Log(LogTarget.File, $"Watchlist Selected");
                         break;
                     case 4: // Earnings
+                        Logger.Log(LogTarget.File, $"Earnings Selected");
                         break;
                     case 5: // Trending Stocks
+                        Logger.Log(LogTarget.File, $"Trending Stocks Selected");
                         break;
                     case 6: // Historical Data
+                        Logger.Log(LogTarget.File, $"Historical Data Selected");
                         break;
                     case 7: // Analysis
+                        Logger.Log(LogTarget.File, $"Analysis Selected");
                         break;
                     case 8: // Stock Summary
+                        Logger.Log(LogTarget.File, $"Stock Summary Selected");
                         break;
                     case 9: // Stock Profile
+                        Logger.Log(LogTarget.File, $"Stock Profile Selected");
                         break;
                     default:
+                        Logger.Log(LogTarget.File, $"Quote Selected");
                         break;
-
                 }
             }
             catch (Exception ex)
@@ -139,30 +148,44 @@ namespace StockProfiler
         {
             var response = RapidInstance.RequestQuote();
             List<Quote> quotes = JSONHandler.ProcessQuoteResponse(response);
-
-            // Display Watchlist
-            Console.WriteLine("Watchlist Profile");
+            
+            Console.WriteLine("Stock Statistics");
             foreach (var item in quotes)
             {
                 Console.WriteLine($"{item.Symbol}\r\n   Name: {item.ShortName}\r\n   Open: {item.RegularMarketOpen}");
                 Logger.Log(LogTarget.File, $"{item.Symbol}\r\n   Name: {item.ShortName}\r\n   Open: {item.RegularMarketOpen}");
             }
-
             return quotes;
         }
 
         /// <summary>
-        /// Testing Redis connection
+        /// Handles JSON strings and logs output to command window.
         /// </summary>
-        public void JunkTesting()
+        /// <returns>List of Quotes Objects</returns>
+        public static dynamic ProcessWatchlistRequest()
         {
-            var redis = Redis.RedisCache;
+            var response = RapidInstance.RequestWatchlist();
+            var watchlist = JSONHandler.ProcessWatchlistResponse(response);
 
-            if (redis.StringSet("testKey", "testValue"))
+            Console.WriteLine("Watchlist Profile");
+            Console.WriteLine($"One Day: {watchlist.Finance.Result[0].Portfolio.OneDayPercentChange}\r\n   " +
+                              $"One Month: {watchlist.Finance.Result[0].Portfolio.OneMonthPercentChange}\r\n   " +
+                              $"One Year: {watchlist.Finance.Result[0].Portfolio.OneYearPercentChange}\r\n  " +
+                              $"Lifetime Percent: {watchlist.Finance.Result[0].Portfolio.LifetimePercentChange}\r\n  " +
+                              $"Updated: {watchlist.Finance.Result[0].Portfolio.UpdatedAt}\r\n  " +
+                              $"Time: {watchlist.Finance.Result[0].Portfolio.OriginTimestamp}\r\n");
+            foreach (var item in watchlist.Finance.Result[0].Symbols)
             {
-                var val = redis.StringGet("testKey");
-                Console.WriteLine(val);
+                Console.WriteLine($"Symbol: {item.Symbol}\r\n  " +
+                                  $"One Day: {item.OneDayPercentChange}\r\n   " +
+                                  $"One Month: {item.OneMonthPercentChange}\r\n   " +
+                                  $"One Year: {item.OneYearPercentChange}\r\n  " +
+                                  $"Lifetime Percent: {item.LifetimePercentChange}\r\n  " +
+                                  $"Updated: {item.UpdatedAt}\r\n  " +
+                                  $"Time: {item.OriginTimestamp}\r\n");
             }
+
+            return watchlist;
         }
     }
 }

@@ -178,7 +178,7 @@ namespace StockProfiler
                 RequestSubType.ANALYSIS => "analysis",
                 RequestSubType.HISTORICAL => "historical-data",
                 RequestSubType.TRENDING => "trending-tickers",
-                _ => "trending-tickers",// Trending Tickers is default as it requires no custom parameters other than region.
+                _ => "trending-tickers", // Trending Tickers is default as it requires no custom parameters other than region.
             };
             string fullSubType = prefix + subType + "?";
             return fullSubType;
@@ -269,7 +269,7 @@ namespace StockProfiler
         // Watchlist
         public string RequestWatchlist()
         {
-            var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-watchlist-performance?region=US&symbols=%255EGSPC&pfId=the_berkshire_hathaway_portfolio&userId=X3NJ2A7VDSABUI4URBWME2PZNM");
+            var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-watchlist-performance?userId=X3NJ2A7VDSABUI4URBWME2PZNM&pfId=the_berkshire_hathaway_portfolio&symbols=MSFT%2CAAPL%2CFB%2CTSLA%2CJNJ%2CPG%2CT%2CSCHW%2CMS%2CCSCO%2CSBUX%2CIIPR&region=US");
             var request = new RestRequest(Method.GET);
             request.AddHeader(HEADERHOST, RAPIDHOST);
             request.AddHeader(HEADERKEY, RAPIDKEY);

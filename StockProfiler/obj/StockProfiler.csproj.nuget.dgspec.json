@@ -62,7 +62,7 @@
             },
             "Moq": {
               "target": "Package",
-              "version": "[4.16.0, )"
+              "version": "[4.16.1, )"
             },
             "RestClient": {
               "target": "Package",
@@ -78,7 +78,7 @@
             },
             "System.Diagnostics.EventLog": {
               "target": "Package",
-              "version": "[5.0.0, )"
+              "version": "[5.0.1, )"
             },
             "xunit": {
               "target": "Package",
