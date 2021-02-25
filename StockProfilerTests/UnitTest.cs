@@ -17,5 +17,35 @@ namespace StockProfilerTests
         {
             Assert.True(true);
         }
+
+        [Fact]
+        public void MongoDBTest()
+        {
+
+        }
+
+        [Fact]
+        public void RedisTest()
+        {
+
+        }
+
+        [Fact]
+        public void JSONHandlerTest()
+        {
+
+        }
+
+        [Fact]
+        public void StockRequestTest()
+        {
+
+        }
+
+        [Fact]
+        public void WatchlistRequestTest()
+        {
+
+        }
     }
 }

@@ -134,7 +134,7 @@
           "lib/netcoreapp3.1/Microsoft.Extensions.Primitives.dll": {}
         }
       },
-      "Microsoft.NETCore.Platforms/5.0.0": {
+      "Microsoft.NETCore.Platforms/5.0.1": {
         "type": "package",
         "compile": {
           "lib/netstandard1.0/_._": {}
@@ -302,17 +302,17 @@
           "build/_._": {}
         }
       },
-      "Moq/4.16.0": {
+      "Moq/4.16.1": {
         "type": "package",
         "dependencies": {
           "Castle.Core": "4.4.0",
           "System.Threading.Tasks.Extensions": "4.5.4"
         },
         "compile": {
-          "lib/netstandard2.0/Moq.dll": {}
+          "lib/netstandard2.1/Moq.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/Moq.dll": {}
+          "lib/netstandard2.1/Moq.dll": {}
         }
       },
       "NETStandard.Library/1.6.1": {
@@ -797,10 +797,10 @@
           "lib/netstandard1.3/System.Diagnostics.DiagnosticSource.dll": {}
         }
       },
-      "System.Diagnostics.EventLog/5.0.0": {
+      "System.Diagnostics.EventLog/5.0.1": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "5.0.0",
+          "Microsoft.NETCore.Platforms": "5.0.1",
           "Microsoft.Win32.Registry": "5.0.0",
           "System.Security.Principal.Windows": "5.0.0"
         },
@@ -811,6 +811,10 @@
           "lib/netstandard2.0/System.Diagnostics.EventLog.dll": {}
         },
         "runtimeTargets": {
+          "runtimes/win/lib/netcoreapp2.0/System.Diagnostics.EventLog.Messages.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          },
           "runtimes/win/lib/netcoreapp2.0/System.Diagnostics.EventLog.dll": {
             "assetType": "runtime",
             "rid": "win"
@@ -2151,10 +2155,10 @@
         "microsoft.extensions.primitives.nuspec"
       ]
     },
-    "Microsoft.NETCore.Platforms/5.0.0": {
-      "sha512": "VyPlqzH2wavqquTcYpkIIAQ6WdenuKoFN0BdYBbCWsclXacSOHNQn66Gt4z5NBqEYW0FAPm5rlvki9ZiCij5xQ==",
+    "Microsoft.NETCore.Platforms/5.0.1": {
+      "sha512": "z3YFkbnl1RMj6lb+Bm/2tsZ0cJCULlB4uPOFqlj6dNSm/8feJl4UrXmG6TcZh8ipJQwkAS5I6UCs1FnGog4QZg==",
       "type": "package",
-      "path": "microsoft.netcore.platforms/5.0.0",
+      "path": "microsoft.netcore.platforms/5.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2162,7 +2166,7 @@
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "lib/netstandard1.0/_._",
-        "microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+        "microsoft.netcore.platforms.5.0.1.nupkg.sha512",
         "microsoft.netcore.platforms.nuspec",
         "runtime.json",
         "useSharedDesignerContext.txt",
@@ -2403,10 +2407,10 @@
         "x64/native/windows/mongocrypt.dll"
       ]
     },
-    "Moq/4.16.0": {
-      "sha512": "YomI39ySpUBi0wX05+orpdO3pyj+2NykmUJdY1vglhm58I+acV4QaGf9FG2JnZ6DTs1tbnv7vsfeAAkYwiSvYQ==",
+    "Moq/4.16.1": {
+      "sha512": "bw3R9q8cVNhWXNpnvWb0OGP4HadS4zvClq+T1zf7AF+tLY1haZ2AvbHidQekf4PDv1T40c6brZeT/V0IBq7cEQ==",
       "type": "package",
-      "path": "moq/4.16.0",
+      "path": "moq/4.16.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2414,7 +2418,9 @@
         "lib/net45/Moq.xml",
         "lib/netstandard2.0/Moq.dll",
         "lib/netstandard2.0/Moq.xml",
-        "moq.4.16.0.nupkg.sha512",
+        "lib/netstandard2.1/Moq.dll",
+        "lib/netstandard2.1/Moq.xml",
+        "moq.4.16.1.nupkg.sha512",
         "moq.nuspec",
         "moq.png"
       ]
@@ -3372,10 +3378,10 @@
         "system.diagnostics.diagnosticsource.nuspec"
       ]
     },
-    "System.Diagnostics.EventLog/5.0.0": {
-      "sha512": "FHkCwUfsTs+/5tsK+c0egLfacUgbhvcwi3wUFWSEEArSXao343mYqcpOVVFMlcCkdNtjU4YwAWaKYwal6f02og==",
+    "System.Diagnostics.EventLog/5.0.1": {
+      "sha512": "k4O5RrjnhJZrP4EgOklUVkcmVdAxs9+PoXCGmlNS3NPIwaSyMMLy7pUaamMHCFkduiOO/ZUzIRjyoCnvXLJpfw==",
       "type": "package",
-      "path": "system.diagnostics.eventlog/5.0.0",
+      "path": "system.diagnostics.eventlog/5.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3390,9 +3396,10 @@
         "ref/net461/System.Diagnostics.EventLog.xml",
         "ref/netstandard2.0/System.Diagnostics.EventLog.dll",
         "ref/netstandard2.0/System.Diagnostics.EventLog.xml",
+        "runtimes/win/lib/netcoreapp2.0/System.Diagnostics.EventLog.Messages.dll",
         "runtimes/win/lib/netcoreapp2.0/System.Diagnostics.EventLog.dll",
         "runtimes/win/lib/netcoreapp2.0/System.Diagnostics.EventLog.xml",
-        "system.diagnostics.eventlog.5.0.0.nupkg.sha512",
+        "system.diagnostics.eventlog.5.0.1.nupkg.sha512",
         "system.diagnostics.eventlog.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
@@ -6679,11 +6686,11 @@
       "MongoDB.Driver >= 2.11.6",
       "MongoDB.Driver.Core >= 2.11.6",
       "MongoDB.Driver.GridFS >= 2.11.6",
-      "Moq >= 4.16.0",
+      "Moq >= 4.16.1",
       "RestClient >= 3.0.0.21",
       "RestSharp >= 106.11.7",
       "StackExchange.Redis >= 2.2.4",
-      "System.Diagnostics.EventLog >= 5.0.0",
+      "System.Diagnostics.EventLog >= 5.0.1",
       "xunit >= 2.4.1"
     ]
   },
@@ -6749,7 +6756,7 @@
           },
           "Moq": {
             "target": "Package",
-            "version": "[4.16.0, )"
+            "version": "[4.16.1, )"
           },
           "RestClient": {
             "target": "Package",
@@ -6765,7 +6772,7 @@
           },
           "System.Diagnostics.EventLog": {
             "target": "Package",
-            "version": "[5.0.0, )"
+            "version": "[5.0.1, )"
           },
           "xunit": {
             "target": "Package",

@@ -18,10 +18,23 @@ namespace StockProfiler
         }
 
         // Message and Log formatting
+        public string LogFormatter()
+        {
+            return DateTime.Today.ToUniversalTime().ToLocalTime().ToString() + ">  ";
+        }
 
         // File Handler Rotater
 
         // CSV and Table file generator
+        public bool CSVGenerator()
+        {
+            return true;
+        }
+
+        public bool GenerateTable()
+        {
+            return true;
+        }
 
         // Stock Merge Delta
     }

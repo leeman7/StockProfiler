@@ -15,7 +15,6 @@ namespace StockProfiler
 
         static Redis()
         {
-
             ConfigurationOptions Options = new ConfigurationOptions
             {
                 EndPoints = { HOST }
@@ -59,6 +58,20 @@ namespace StockProfiler
             subscriber.SubscribeAsync("messages", (channel, message) => {
                 Console.WriteLine(message);
             });
+        }
+
+        /// <summary>
+        /// Testing Redis connection
+        /// </summary>
+        public void JunkTesting()
+        {
+            var redis = Redis.RedisCache;
+
+            if (redis.StringSet("testKey", "testValue"))
+            {
+                var val = redis.StringGet("testKey");
+                Console.WriteLine(val);
+            }
         }
 
         /// <summary>
