@@ -99,7 +99,6 @@ namespace StockProfiler
 
         private static void Shutdown()
         {
-            return 1;
         }
 
         /// <summary>
