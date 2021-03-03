@@ -139,7 +139,7 @@ namespace StockProfiler
         private void PollRequestEvent(object sender, ElapsedEventArgs e)
         {
             Console.WriteLine($"Timed Event: ");
-            var quotes = Program.ProcessJSONRequest();
+            var quotes = Program.ProcessQuoteRequest();
             Program.RedisClient.Save(quotes);
             Program.MongoClient.InsertMany();
         }

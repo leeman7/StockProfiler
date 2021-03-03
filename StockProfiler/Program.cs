@@ -31,9 +31,6 @@ namespace StockProfiler
 
             }
 
-            ProcessJSONRequest();
-            ProcessWatchlistRequest();
-
             // Keep Program going
             Console.ReadLine();
         }
@@ -48,34 +45,48 @@ namespace StockProfiler
             {
                 switch (command)
                 {
+                    case 0: // Exit Program
+                        Shutdown();
+                        Logger.Log(LogTarget.File, $"Closing down application");
+                        break;
                     case 1: // Quotes
+                        ProcessQuoteRequest();
                         Logger.Log(LogTarget.File, $"Quote Selected");
                         break;
                     case 2: // Charts
+                        ProcessChartsRequest();
                         Logger.Log(LogTarget.File, $"Charts Selected");
                         break;
                     case 3: // Watchlist
+                        ProcessWatchlistRequest();
                         Logger.Log(LogTarget.File, $"Watchlist Selected");
                         break;
                     case 4: // Earnings
+                        ProcessEarningsRequest();
                         Logger.Log(LogTarget.File, $"Earnings Selected");
                         break;
                     case 5: // Trending Stocks
+                        ProcessTrendingRequest();
                         Logger.Log(LogTarget.File, $"Trending Stocks Selected");
                         break;
                     case 6: // Historical Data
+                        ProcessHistoricalDataRequest();
                         Logger.Log(LogTarget.File, $"Historical Data Selected");
                         break;
                     case 7: // Analysis
+                        ProcessStockAnalysisRequest();
                         Logger.Log(LogTarget.File, $"Analysis Selected");
                         break;
                     case 8: // Stock Summary
+                        ProcessStockSummaryRequest();
                         Logger.Log(LogTarget.File, $"Stock Summary Selected");
                         break;
                     case 9: // Stock Profile
+                        ProcessStockProfileRequest();
                         Logger.Log(LogTarget.File, $"Stock Profile Selected");
                         break;
                     default:
+                        ProcessQuoteRequest();
                         Logger.Log(LogTarget.File, $"Quote Selected");
                         break;
                 }
@@ -84,6 +95,10 @@ namespace StockProfiler
             {
                 Logger.Log(LogTarget.Exception, $"{ex}");
             }
+        }
+
+        private static void Shutdown()
+        {
         }
 
         /// <summary>
@@ -110,6 +125,7 @@ namespace StockProfiler
         private static void DisplayPromptOptions()
         {
             Console.WriteLine("========OPTIONS========");
+            Console.WriteLine("0 - Exit Program");
             Console.WriteLine("1 - Quotes");
             Console.WriteLine("2 - Charts");
             Console.WriteLine("3 - Watchlist");
@@ -118,7 +134,8 @@ namespace StockProfiler
             Console.WriteLine("6 - Historical Data");
             Console.WriteLine("7 - Analysis");
             Console.WriteLine("8 - Stock Summary");
-            Console.WriteLine("9 - Stock Profile");            
+            Console.WriteLine("9 - Stock Profile");
+            Console.WriteLine("\r\n");
         }
 
         public static void Init()
@@ -144,7 +161,7 @@ namespace StockProfiler
         /// Handles JSON strings and logs output to command window.
         /// </summary>
         /// <returns>List of Quotes Objects</returns>
-        public static List<Quote> ProcessJSONRequest()
+        public static List<Quote> ProcessQuoteRequest()
         {
             var response = RapidInstance.RequestQuote();
             List<Quote> quotes = JSONHandler.ProcessQuoteResponse(response);
@@ -184,6 +201,110 @@ namespace StockProfiler
                                   $"Updated: {item.UpdatedAt}\r\n  " +
                                   $"Time: {item.OriginTimestamp}\r\n");
             }
+
+            return watchlist;
+        }
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Charts request.
+        /// </summary>
+        /// <returns></returns>
+        public static dynamic ProcessChartsRequest()
+        {
+            var response = RapidInstance.RequestCharts();
+            var watchlist = JSONHandler.ProcessChartsResponse(response);
+
+            Console.WriteLine("Watchlist Profile");
+            Console.WriteLine($"");
+
+            return watchlist;
+        }
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Earnings request.
+        /// </summary>
+        /// <returns></returns>
+        public static dynamic ProcessEarningsRequest()
+        {
+            var response = RapidInstance.RequestEarnings();
+            var watchlist = JSONHandler.ProcessEarningsResponse(response);
+
+            Console.WriteLine("Watchlist Profile");
+            Console.WriteLine($"");
+
+            return watchlist;
+        }
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Trending Request.
+        /// </summary>
+        /// <returns></returns>
+        public static dynamic ProcessTrendingRequest()
+        {
+            var response = RapidInstance.RequestTrendingStocks();
+            var watchlist = JSONHandler.ProcessTrendingResponse(response);
+
+            Console.WriteLine("Watchlist Profile");
+            Console.WriteLine($"");
+
+            return watchlist;
+        }
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Stock Profile.
+        /// </summary>
+        private static dynamic ProcessStockProfileRequest()
+        {
+            var response = RapidInstance.RequestStockProfile();
+            var watchlist = JSONHandler.ProcessStockProfileResponse(response);
+
+            Console.WriteLine("Watchlist Profile");
+            Console.WriteLine($"");
+
+            return watchlist;
+        }
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Stock Summary.
+        /// </summary>
+        /// <returns></returns>
+        private static dynamic ProcessStockSummaryRequest()
+        {
+            var response = RapidInstance.RequestStockSummary();
+            var watchlist = JSONHandler.ProcessStockSummaryResponse(response);
+
+            Console.WriteLine("Watchlist Profile");
+            Console.WriteLine($"");
+
+            return watchlist;
+        }
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Stock Analysis.
+        /// </summary>
+        /// <returns></returns>
+        private static dynamic ProcessStockAnalysisRequest()
+        {
+            var response = RapidInstance.RequestStockAnalysis();
+            var watchlist = JSONHandler.ProcessStockAnalysisResponse(response);
+
+            Console.WriteLine("Watchlist Profile");
+            Console.WriteLine($"");
+
+            return watchlist;
+        }
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Historical Data.
+        /// </summary>
+        /// <returns></returns>
+        private static dynamic ProcessHistoricalDataRequest()
+        {
+            var response = RapidInstance.RequestHistoricalData();
+            var watchlist = JSONHandler.ProcessHistoricalDataResponse(response);
+
+            Console.WriteLine("Watchlist Profile");
+            Console.WriteLine($"");
 
             return watchlist;
         }
