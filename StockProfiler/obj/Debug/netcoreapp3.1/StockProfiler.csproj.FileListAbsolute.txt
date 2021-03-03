@@ -94,3 +94,4 @@ C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcor
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Security.Principal.Windows.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Security.Principal.Windows.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcoreapp3.1\StockProfiler.csprojAssemblyReference.cache
+C:\Users\Leema\source\repos\leeman7\StockProfiler\StockProfiler\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.EventLog.Messages.dll

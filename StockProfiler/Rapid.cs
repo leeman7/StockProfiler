@@ -336,7 +336,7 @@ namespace StockProfiler
         // Stock Profile
         public string RequestStockProfile()
         {
-            var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-profile?region=US&symbol=AMRN");
+            var client = new RestClient("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-profile?region=US&symbol=SCHW");
             var request = new RestRequest(Method.GET);
             request.AddHeader(HEADERHOST, RAPIDHOST);
             request.AddHeader(HEADERKEY, RAPIDKEY);
