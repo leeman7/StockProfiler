@@ -6,6 +6,11 @@ namespace StockProfiler
 {
     public class JsonHandler
     {
+        public JsonHandler()
+        {
+
+        }
+
         /// <summary>
         /// Parse Quote data from RAPID API.
         /// </summary>
@@ -92,6 +97,25 @@ namespace StockProfiler
             return watchlistSymbol;
         }
 
+        #region Quotes
+        /// <summary>
+        /// Handles JSON strings and logs output to command window.
+        /// </summary>
+        /// <returns>List of Quotes Objects</returns>
+        public List<Quote> ProcessQuoteRequest(Container container)
+        {
+            var response = container.RapidInstance.RequestQuote();
+            List<Quote> quotes = container.JSONHandler.ProcessQuoteResponse(response);
+
+            Console.WriteLine("Stock Statistics");
+            foreach (var item in quotes)
+            {
+                Console.WriteLine($"{item.Symbol}\r\n   Name: {item.ShortName}\r\n   Open: {item.RegularMarketOpen}");
+                Logger.Log(LogTarget.File, $"{item.Symbol}\r\n   Name: {item.ShortName}\r\n   Open: {item.RegularMarketOpen}");
+            }
+            return quotes;
+        }
+
         /// <summary>
         /// Process JSON Quote response and return a list of Quote data.
         /// </summary>
@@ -113,6 +137,39 @@ namespace StockProfiler
             return quotes;
         }
 
+        #endregion
+        #region Watchlist
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window.
+        /// </summary>
+        /// <returns>List of Quotes Objects</returns>
+        public dynamic ProcessWatchlistRequest(Container container)
+        {
+            var response = container.RapidInstance.RequestWatchlist();
+            var watchlist = container.JSONHandler.ProcessWatchlistResponse(response);
+
+            Console.WriteLine("Watchlist Profile");
+            Console.WriteLine($"One Day: {watchlist.Finance.Result[0].Portfolio.OneDayPercentChange}\r\n   " +
+                              $"One Month: {watchlist.Finance.Result[0].Portfolio.OneMonthPercentChange}\r\n   " +
+                              $"One Year: {watchlist.Finance.Result[0].Portfolio.OneYearPercentChange}\r\n  " +
+                              $"Lifetime Percent: {watchlist.Finance.Result[0].Portfolio.LifetimePercentChange}\r\n  " +
+                              $"Updated: {watchlist.Finance.Result[0].Portfolio.UpdatedAt}\r\n  " +
+                              $"Time: {watchlist.Finance.Result[0].Portfolio.OriginTimestamp}\r\n");
+            foreach (var item in watchlist.Finance.Result[0].Symbols)
+            {
+                Console.WriteLine($"Symbol: {item.Symbol}\r\n  " +
+                                  $"One Day: {item.OneDayPercentChange}\r\n   " +
+                                  $"One Month: {item.OneMonthPercentChange}\r\n   " +
+                                  $"One Year: {item.OneYearPercentChange}\r\n  " +
+                                  $"Lifetime Percent: {item.LifetimePercentChange}\r\n  " +
+                                  $"Updated: {item.UpdatedAt}\r\n  " +
+                                  $"Time: {item.OriginTimestamp}\r\n");
+            }
+
+            return watchlist;
+        }
+
         /// <summary>
         /// Process JSON Quote response and return a list of Quote data.
         /// </summary>
@@ -132,6 +189,35 @@ namespace StockProfiler
             }
 
             return watchlist;
+        }
+        #endregion
+        #region Earnings
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Earnings request.
+        /// </summary>
+        /// <returns></returns>
+        public dynamic ProcessEarningsRequest(Container container)
+        {
+            var response = container.RapidInstance.RequestEarnings();
+            var earnings = container.JSONHandler.ProcessEarningsResponse(response);
+
+            Console.WriteLine("Earnings Report");
+
+            foreach (var item in earnings.Finance.Result)
+            {
+                Console.WriteLine($"Symbol: {item.Ticker}" + "\r\n" +
+                                  $"Company: {item.CompanyShortName}" + "\r\n" +
+                                  $"StartDate: {item.StartDateTime}" + "\r\n" +
+                                  $"Rank: {item.Rank}" + "\r\n" +
+                                  $"Surprise Percent: {item.SurprisePercent}");
+                Logger.Log(LogTarget.File, $"Symbol: {item.Ticker}" + "\r\n" +
+                                  $"Company: {item.CompanyShortName}" + "\r\n" +
+                                  $"StartDate: {item.StartDateTime}" + "\r\n" +
+                                  $"Rank: {item.Rank}" + "\r\n" +
+                                  $"Surprise Percent: {item.SurprisePercent}");
+            }
+
+            return earnings;
         }
 
         /// <summary>
@@ -160,9 +246,32 @@ namespace StockProfiler
         /// </summary>
         /// <param name="entries"></param>
         /// <returns></returns>
-        private Earnings ParseEarnings(Earnings entries)
+        public Earnings ParseEarnings(Earnings entries)
         {
-            throw new NotImplementedException();
+            
+            foreach (var item in entries.Finance.Result)
+            {
+                if (item.StartDateTimeType == "TNS")
+                    item.StartDateTimeType = 0;
+            }
+            return entries;
+        }
+        #endregion
+        #region Trending
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Trending Request.
+        /// </summary>
+        /// <returns></returns>
+        public dynamic ProcessTrendingRequest(Container container)
+        {
+            var response = container.RapidInstance.RequestTrendingStocks();
+            var watchlist = container.JSONHandler.ProcessTrendingResponse(response);
+
+            Console.WriteLine("Trending Report");
+            Console.WriteLine($"");
+
+            return watchlist;
         }
 
         /// <summary>
@@ -196,18 +305,35 @@ namespace StockProfiler
             throw new NotImplementedException();
         }
 
+        #endregion
+        #region Stock Profile
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Stock Profile.
+        /// </summary>
+        public dynamic ProcessStockProfileRequest(Container container)
+        {
+            var response = container.RapidInstance.RequestStockProfile();
+            var watchlist = container.JSONHandler.ProcessStockProfileResponse(response);
+
+            Console.WriteLine("Stock Profile");
+            Console.WriteLine($"");
+
+            return watchlist;
+        }
+
         /// <summary>
         /// Stock Profile response handling.
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        internal object ProcessStockProfileResponse(string response)
+        public object ProcessStockProfileResponse(string response)
         {
             Trending trending = new Trending();
             try
             {
                 var entries = JsonConvert.DeserializeObject<StockProfile>(response);
-                trending = ParseStockProfile(entries);
+                //var stockProfile = ParseStockProfile(entries);
             }
             catch (Exception ex)
             {
@@ -222,9 +348,34 @@ namespace StockProfiler
         /// </summary>
         /// <param name="entries"></param>
         /// <returns></returns>
-        private Trending ParseStockProfile(StockProfile entries)
+        public StockProfile ParseStockProfile(StockProfile entries)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return entries;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        #endregion
+        #region  Stock Summary
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Stock Summary.
+        /// </summary>
+        /// <returns></returns>
+        public dynamic ProcessStockSummaryRequest(Container container)
+        {
+            var response = container.RapidInstance.RequestStockSummary();
+            var watchlist = container.JSONHandler.ProcessStockSummaryResponse(response);
+
+            Console.WriteLine("Stock Summary");
+            Console.WriteLine($"");
+
+            return watchlist;
         }
 
         /// <summary>
@@ -234,18 +385,18 @@ namespace StockProfiler
         /// <returns></returns>
         public object ProcessStockSummaryResponse(string response)
         {
-            Trending trending = new Trending();
+            StockSummary stockSummary = new StockSummary();
             try
             {
                 var entries = JsonConvert.DeserializeObject<StockSummary>(response);
-                trending = ParseStockSummary(entries);
+                stockSummary = ParseStockSummary(entries);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Exception occurred in ProcessStockSummaryResponse: {ex}");
             }
 
-            return trending;
+            return stockSummary;
         }
 
         /// <summary>
@@ -253,18 +404,43 @@ namespace StockProfiler
         /// </summary>
         /// <param name="entries"></param>
         /// <returns></returns>
-        private Trending ParseStockSummary(StockSummary entries)
+        public StockSummary ParseStockSummary(StockSummary entries)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return entries;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception occurred in ParseStockSummaryResponse: {ex}");
+            }
+            return entries;
+        }
+        #endregion
+        #region Charts
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Charts request.
+        /// </summary>
+        /// <returns></returns>
+        public dynamic ProcessChartsRequest(Container container)
+        {
+            var response = container.RapidInstance.RequestCharts();
+            var watchlist = container.JSONHandler.ProcessChartsResponse(response);
+
+            Console.WriteLine("Charts");
+            Console.WriteLine($"");
+
+            return watchlist;
         }
 
-        internal object ProcessChartsResponse(string response)
+        public object ProcessChartsResponse(string response)
         {
             Charts trending = new Charts();
             try
             {
                 var entries = JsonConvert.DeserializeObject<Charts>(response);
-                //trending = ParseStockSummary(entries);
+                //trending = ParseCharts(entries);
             }
             catch (Exception ex)
             {
@@ -273,19 +449,36 @@ namespace StockProfiler
 
             return trending;
         }
+        #endregion
+        #region Stock Analysis
+
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Stock Analysis.
+        /// </summary>
+        /// <returns></returns>
+        public dynamic ProcessStockAnalysisRequest(Container container)
+        {
+            var response = container.RapidInstance.RequestStockAnalysis();
+            var watchlist = container.JSONHandler.ProcessStockAnalysisResponse(response);
+
+            Console.WriteLine("Stock Analysis Report");
+            Console.WriteLine($"");
+
+            return watchlist;
+        }
 
         /// <summary>
         /// Stock Analysis response handling.
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        internal object ProcessStockAnalysisResponse(string response)
+        public object ProcessStockAnalysisResponse(string response)
         {
             StockAnalysis trending = new StockAnalysis();
             try
             {
                 var entries = JsonConvert.DeserializeObject<StockAnalysis>(response);
-                //trending = ParseStockAnalysis(entries);
+                var stockAnalysis = ParseStockAnalysis(entries);
             }
             catch (Exception ex)
             {
@@ -300,9 +493,26 @@ namespace StockProfiler
         /// </summary>
         /// <param name="entries"></param>
         /// <returns></returns>
-        private Trending ParseStockAnalysis(StockAnalysis entries)
+        public StockAnalysis ParseStockAnalysis(StockAnalysis entries)
         {
             throw new NotImplementedException();
+        }
+
+        #endregion
+        #region Historical Data
+        /// <summary>
+        /// Handles JSON strings and logs output to command window for Historical Data.
+        /// </summary>
+        /// <returns></returns>
+        public dynamic ProcessHistoricalDataRequest(Container container)
+        {
+            var response = container.RapidInstance.RequestHistoricalData();
+            var watchlist = ProcessHistoricalDataResponse(response);
+
+            Console.WriteLine("Historical Data");
+            Console.WriteLine($"");
+
+            return watchlist;
         }
 
         /// <summary>
@@ -331,13 +541,14 @@ namespace StockProfiler
         /// </summary>
         /// <param name="entries"></param>
         /// <returns></returns>
-        private Trending ParseHistoricalData(HistoricalData entries)
+        public Trending ParseHistoricalData(HistoricalData entries)
         {
             throw new NotImplementedException();
         }
     }
 
     #region JSON Objects
+    #endregion
 
     #region Quote JSON Object
     public class Root
@@ -2278,7 +2489,7 @@ namespace StockProfiler
         public long StartDateTime { get; set; }
 
         [JsonProperty("startDateTimeType")]
-        public StartDateTimeType StartDateTimeType { get; set; }
+        public dynamic StartDateTimeType { get; set; }
 
         [JsonProperty("surprisePercent")]
         public double SurprisePercent { get; set; }
@@ -2286,8 +2497,6 @@ namespace StockProfiler
         [JsonProperty("rank")]
         public long Rank { get; set; }
     }
-
-    public enum StartDateTimeType { Tns };
 
     // Sample Earnings Response
     /*
@@ -5573,12 +5782,10 @@ namespace StockProfiler
         public long MaxAge { get; set; }
 
         [JsonProperty("name")]
-        [JsonConverter(typeof(NameConverter))]
-        public Name Name { get; set; }
+        public dynamic Name { get; set; }
 
         [JsonProperty("relation")]
-        [JsonConverter(typeof(RelationConverter))]
-        public Relation Relation { get; set; }
+        public dynamic Relation { get; set; }
 
         [JsonProperty("url")]
         public string Url { get; set; }
@@ -5612,7 +5819,6 @@ namespace StockProfiler
     public partial class Transaction
     {
         [JsonProperty("filerName")]
-        [JsonConverter(typeof(NameConverter))]
         public dynamic FilerName { get; set; }
 
         [JsonProperty("transactionText")]
@@ -5632,7 +5838,6 @@ namespace StockProfiler
         public EnterpriseValue Value { get; set; }
 
         [JsonProperty("filerRelation")]
-        [JsonConverter(typeof(RelationConverter))]
         public dynamic FilerRelation { get; set; }
 
         [JsonProperty("shares")]
@@ -6138,10 +6343,6 @@ namespace StockProfiler
         public dynamic Action { get; set; }
     }
 
-    public enum Name { BergAaronD, EkmanLarsG, KalbMichaelWayne, KennedyJosephT, KetchumStevenB, PetersonKristine, StackDavidM, TheroJohnF, VanHeekGJan, ZakrzewskiJosephSJr };
-
-    public enum Relation { ChiefExecutiveOfficer, ChiefFinancialOfficer, Director, GeneralCounsel, Officer };
-
     public enum TransactionDescription { ConversionOfExerciseOfDerivativeSecurity, Sale };
 
     public enum OwnershipEnum { D, I };
@@ -6154,151 +6355,12 @@ namespace StockProfiler
             DateParseHandling = DateParseHandling.None,
             Converters =
             {
-                NameConverter.Singleton,
-                RelationConverter.Singleton,
                 TransactionDescriptionConverter.Singleton,
                 OwnershipEnumConverter.Singleton,
                 ActionConverter.Singleton,
                 FromGradeConverter.Singleton
             },
         };
-    }
-
-    internal class NameConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(Name) || t == typeof(Name?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            switch (value)
-            {
-                case "BERG AARON D.":
-                    return Name.BergAaronD;
-                case "EKMAN LARS G":
-                    return Name.EkmanLarsG;
-                case "KALB MICHAEL WAYNE":
-                    return Name.KalbMichaelWayne;
-                case "KENNEDY JOSEPH T":
-                    return Name.KennedyJosephT;
-                case "KETCHUM STEVEN B":
-                    return Name.KetchumStevenB;
-                case "PETERSON KRISTINE":
-                    return Name.PetersonKristine;
-                case "STACK DAVID M":
-                    return Name.StackDavidM;
-                case "THERO JOHN F":
-                    return Name.TheroJohnF;
-                case "VAN HEEK G JAN":
-                    return Name.VanHeekGJan;
-                case "ZAKRZEWSKI JOSEPH S. JR":
-                    return Name.ZakrzewskiJosephSJr;
-            }
-            throw new Exception("Cannot unmarshal type Name");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (Name)untypedValue;
-            switch (value)
-            {
-                case Name.BergAaronD:
-                    serializer.Serialize(writer, "BERG AARON D.");
-                    return;
-                case Name.EkmanLarsG:
-                    serializer.Serialize(writer, "EKMAN LARS G");
-                    return;
-                case Name.KalbMichaelWayne:
-                    serializer.Serialize(writer, "KALB MICHAEL WAYNE");
-                    return;
-                case Name.KennedyJosephT:
-                    serializer.Serialize(writer, "KENNEDY JOSEPH T");
-                    return;
-                case Name.KetchumStevenB:
-                    serializer.Serialize(writer, "KETCHUM STEVEN B");
-                    return;
-                case Name.PetersonKristine:
-                    serializer.Serialize(writer, "PETERSON KRISTINE");
-                    return;
-                case Name.StackDavidM:
-                    serializer.Serialize(writer, "STACK DAVID M");
-                    return;
-                case Name.TheroJohnF:
-                    serializer.Serialize(writer, "THERO JOHN F");
-                    return;
-                case Name.VanHeekGJan:
-                    serializer.Serialize(writer, "VAN HEEK G JAN");
-                    return;
-                case Name.ZakrzewskiJosephSJr:
-                    serializer.Serialize(writer, "ZAKRZEWSKI JOSEPH S. JR");
-                    return;
-            }
-            throw new Exception("Cannot marshal type Name");
-        }
-
-        public static readonly NameConverter Singleton = new NameConverter();
-    }
-
-    internal class RelationConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(Relation) || t == typeof(Relation?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            switch (value)
-            {
-                case "Chief Executive Officer":
-                    return Relation.ChiefExecutiveOfficer;
-                case "Chief Financial Officer":
-                    return Relation.ChiefFinancialOfficer;
-                case "Director":
-                    return Relation.Director;
-                case "General Counsel":
-                    return Relation.GeneralCounsel;
-                case "Officer":
-                    return Relation.Officer;
-            }
-            throw new Exception("Cannot unmarshal type Relation");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (Relation)untypedValue;
-            switch (value)
-            {
-                case Relation.ChiefExecutiveOfficer:
-                    serializer.Serialize(writer, "Chief Executive Officer");
-                    return;
-                case Relation.ChiefFinancialOfficer:
-                    serializer.Serialize(writer, "Chief Financial Officer");
-                    return;
-                case Relation.Director:
-                    serializer.Serialize(writer, "Director");
-                    return;
-                case Relation.GeneralCounsel:
-                    serializer.Serialize(writer, "General Counsel");
-                    return;
-                case Relation.Officer:
-                    serializer.Serialize(writer, "Officer");
-                    return;
-            }
-            throw new Exception("Cannot marshal type Relation");
-        }
-
-        public static readonly RelationConverter Singleton = new RelationConverter();
     }
 
     internal class TransactionDescriptionConverter : JsonConverter
@@ -12806,6 +12868,5 @@ namespace StockProfiler
     }
      */
     #endregion
-
     #endregion
 }

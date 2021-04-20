@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata;
 using System.Text;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.WireProtocol.Messages;
-using MongoDB.Driver.GridFS;
 using MongoDB.Driver.Linq;
 
 namespace StockProfiler
@@ -15,7 +12,7 @@ namespace StockProfiler
         private const string HOST = "mongodb://localhost:27017";
         private const string DATABASE = "StockProfiler";
         private MongoClient mongoClient { get; set; }
-        public MongoClient MongoClient => mongoClient;
+        public MongoClient MongoClient { get; private set; }
         IMongoDatabase MongoDatabase { get; set; }        
         public bool IsConnected { get; set; }
 
@@ -23,7 +20,7 @@ namespace StockProfiler
 
         public Mongo()
         {
-            mongoClient = new MongoClient(HOST);
+            MongoClient = mongoClient = new MongoClient(HOST);
         }        
 
         /// <summary>
