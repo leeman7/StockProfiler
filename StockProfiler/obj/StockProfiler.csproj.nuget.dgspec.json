@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Leema\\source\\repos\\leeman7\\StockProfiler\\StockProfiler\\StockProfiler.csproj": {}
+    "C:\\Users\\Leema\\Source\\Repos\\leeman7\\StockProfiler\\StockProfiler\\StockProfiler.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Leema\\source\\repos\\leeman7\\StockProfiler\\StockProfiler\\StockProfiler.csproj": {
+    "C:\\Users\\Leema\\Source\\Repos\\leeman7\\StockProfiler\\StockProfiler\\StockProfiler.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Leema\\source\\repos\\leeman7\\StockProfiler\\StockProfiler\\StockProfiler.csproj",
+        "projectUniqueName": "C:\\Users\\Leema\\Source\\Repos\\leeman7\\StockProfiler\\StockProfiler\\StockProfiler.csproj",
         "projectName": "StockProfiler",
-        "projectPath": "C:\\Users\\Leema\\source\\repos\\leeman7\\StockProfiler\\StockProfiler\\StockProfiler.csproj",
+        "projectPath": "C:\\Users\\Leema\\Source\\Repos\\leeman7\\StockProfiler\\StockProfiler\\StockProfiler.csproj",
         "packagesPath": "C:\\Users\\Leema\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Leema\\source\\repos\\leeman7\\StockProfiler\\StockProfiler\\obj\\",
+        "outputPath": "C:\\Users\\Leema\\Source\\Repos\\leeman7\\StockProfiler\\StockProfiler\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -46,19 +46,19 @@
           "dependencies": {
             "MongoDB.Bson": {
               "target": "Package",
-              "version": "[2.12.0, )"
+              "version": "[2.12.2, )"
             },
             "MongoDB.Driver": {
               "target": "Package",
-              "version": "[2.12.0, )"
+              "version": "[2.12.2, )"
             },
             "MongoDB.Driver.Core": {
               "target": "Package",
-              "version": "[2.12.0, )"
+              "version": "[2.12.2, )"
             },
             "MongoDB.Driver.GridFS": {
               "target": "Package",
-              "version": "[2.12.0, )"
+              "version": "[2.12.2, )"
             },
             "Moq": {
               "target": "Package",
@@ -66,7 +66,7 @@
             },
             "RestClient": {
               "target": "Package",
-              "version": "[3.0.0.21, )"
+              "version": "[3.446.20952, )"
             },
             "RestSharp": {
               "target": "Package",

@@ -9,6 +9,7 @@ namespace StockProfilerTests
         [Fact]
         public void StartUpTest()
         {
+            //var mock = new Mock<Container>
             Assert.True(true);
         }
 
@@ -21,7 +22,6 @@ namespace StockProfilerTests
         [Fact]
         public void MongoDBTest()
         {
-
         }
 
         [Fact]

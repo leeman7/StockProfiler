@@ -31,7 +31,7 @@ namespace StockProfiler
         /// <summary>
         /// Reconnect logic
         /// </summary>
-        public void Reconnect()
+        public bool Reconnect()
         {
             try
             {
@@ -42,11 +42,13 @@ namespace StockProfiler
                     ConfigurationOptions Options = new ConfigurationOptions { EndPoints = { HOST } };
                     redisClient = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(Options));
                 }
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
+            return false;
         }
 
         /// <summary>

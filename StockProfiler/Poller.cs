@@ -9,6 +9,7 @@ namespace StockProfiler
 {
     public class Poller
     {
+        Container Container { get; set; }
         private System.Timers.Timer pollTimer { get; set; }
         public System.Timers.Timer PollTimer => pollTimer;
 
@@ -19,8 +20,9 @@ namespace StockProfiler
             Requests
         }
 
-        public Poller()
+        public Poller(Container container)
         {
+            Container = container;
         }
 
         /// <summary>
@@ -29,8 +31,9 @@ namespace StockProfiler
         /// <param name="eventType">Type of Event from above enums</param>
         /// <param name="timer">how long timer should last</param>
         /// <param name="interval">interval in which to check</param>
-        public Poller(EventHandlerType eventType, int timer, int interval)
+        public Poller(EventHandlerType eventType, int timer, int interval, Container container)
         {
+            Container = container;
             pollTimer = new System.Timers.Timer(timer);
             pollTimer.Elapsed += SetEventHandler(eventType);
             pollTimer.Interval = interval;
@@ -126,8 +129,8 @@ namespace StockProfiler
         /// <param name="e"></param>
         private void PollConnectionEvent(object sender, ElapsedEventArgs e)
         {
-            Program.MongoClient.IsConnected = Program.MongoClient.PingDatabase();
-            Program.RedisClient.IsConnected = Program.RedisClient.TestConnection();
+            Container.MongoClient.IsConnected = Container.MongoClient.PingDatabase();
+            Container.RedisClient.IsConnected = Container.RedisClient.TestConnection();
         }
 
         /// <summary>
@@ -139,9 +142,9 @@ namespace StockProfiler
         private void PollRequestEvent(object sender, ElapsedEventArgs e)
         {
             Console.WriteLine($"Timed Event: ");
-            var quotes = Program.ProcessQuoteRequest();
-            Program.RedisClient.Save(quotes);
-            Program.MongoClient.InsertMany();
+            var quotes = Container.JSONHandler.ProcessQuoteRequest(Container);
+            Container.RedisClient.Save(quotes);
+            Container.MongoClient.InsertMany();
         }
     }
 }
