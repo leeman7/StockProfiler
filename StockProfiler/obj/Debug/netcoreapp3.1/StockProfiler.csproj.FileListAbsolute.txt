@@ -98,3 +98,4 @@ C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcor
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcoreapp3.1\StockProfiler.dll
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcoreapp3.1\StockProfiler.pdb
 C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcoreapp3.1\StockProfiler.genruntimeconfig.cache
+C:\Users\Leema\Source\Repos\leeman7\StockProfiler\StockProfiler\obj\Debug\netcoreapp3.1\StockProfiler.csprojAssemblyReference.cache

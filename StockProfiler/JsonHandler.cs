@@ -271,6 +271,20 @@ namespace StockProfiler
             Console.WriteLine("Trending Report");
             Console.WriteLine($"");
 
+            /*foreach (var item in earnings.Finance.Result)
+            {
+                Console.WriteLine($"Symbol: {item.Ticker}" + "\r\n" +
+                                  $"Company: {item.CompanyShortName}" + "\r\n" +
+                                  $"StartDate: {item.StartDateTime}" + "\r\n" +
+                                  $"Rank: {item.Rank}" + "\r\n" +
+                                  $"Surprise Percent: {item.SurprisePercent}");
+                Logger.Log(LogTarget.File, $"Symbol: {item.Ticker}" + "\r\n" +
+                                  $"Company: {item.CompanyShortName}" + "\r\n" +
+                                  $"StartDate: {item.StartDateTime}" + "\r\n" +
+                                  $"Rank: {item.Rank}" + "\r\n" +
+                                  $"Surprise Percent: {item.SurprisePercent}");
+            }*/
+
             return watchlist;
         }
 
@@ -314,12 +328,37 @@ namespace StockProfiler
         public dynamic ProcessStockProfileRequest(Container container)
         {
             var response = container.RapidInstance.RequestStockProfile();
-            var watchlist = container.JSONHandler.ProcessStockProfileResponse(response);
+            StockProfile stockprofile = container.JSONHandler.ProcessStockProfileResponse(response);
 
             Console.WriteLine("Stock Profile");
             Console.WriteLine($"");
 
-            return watchlist;
+            Console.WriteLine($"Symbol: {stockprofile.Symbol}" + "\r\n" +
+                  $"Company: {stockprofile.QuoteType.LongName}" + "\r\n" +
+                  $"50 Day Average: {stockprofile.SummaryDetail.FiftyDayAverage}" + "\r\n" +
+                  $"Dividend Yield: {stockprofile.SummaryDetail.DividendYield}" + "\r\n" +
+                  $"Forward P/E: {stockprofile.SummaryDetail.ForwardPe}" + "\r\n" +
+                  $"Day High: {stockprofile.SummaryDetail.DayHigh}" + "\r\n" +
+                  $"Day Low: {stockprofile.SummaryDetail.DayLow}" + "\r\n" +
+                  $"Ask: {stockprofile.SummaryDetail.Ask}" + "\r\n" +
+                  $"Bid: {stockprofile.SummaryDetail.Bid}" + "\r\n" +
+                  $"AverageDailyVolume: {stockprofile.SummaryDetail.AverageDailyVolume10Day}" + "\r\n" +
+                  $"MarketCap: {stockprofile.SummaryDetail.MarketCap}" + "\r\n" +
+                  $"Volume: {stockprofile.SummaryDetail.Volume}");
+            Logger.Log(LogTarget.File, $"Symbol: {stockprofile.Symbol}" + "\r\n" +
+                  $"Company: {stockprofile.QuoteType.LongName}" + "\r\n" +
+                  $"50 Day Average: {stockprofile.SummaryDetail.FiftyDayAverage}" + "\r\n" +
+                  $"Dividend Yield: {stockprofile.SummaryDetail.DividendYield}" + "\r\n" +
+                  $"Forward P/E: {stockprofile.SummaryDetail.ForwardPe}" + "\r\n" +
+                  $"Day High: {stockprofile.SummaryDetail.DayHigh}" + "\r\n" +
+                  $"Day Low: {stockprofile.SummaryDetail.DayLow}" + "\r\n" +
+                  $"Ask: {stockprofile.SummaryDetail.Ask}" + "\r\n" +
+                  $"Bid: {stockprofile.SummaryDetail.Bid}" + "\r\n" +
+                  $"AverageDailyVolume: {stockprofile.SummaryDetail.AverageDailyVolume10Day}" + "\r\n" +
+                  $"MarketCap: {stockprofile.SummaryDetail.MarketCap}" + "\r\n" +
+                  $"Volume: {stockprofile.SummaryDetail.Volume}");
+
+            return stockprofile;
         }
 
         /// <summary>
@@ -327,20 +366,20 @@ namespace StockProfiler
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        public object ProcessStockProfileResponse(string response)
+        public StockProfile ProcessStockProfileResponse(string response)
         {
-            Trending trending = new Trending();
+            StockProfile stockProfile = new StockProfile();
             try
             {
                 var entries = JsonConvert.DeserializeObject<StockProfile>(response);
-                //var stockProfile = ParseStockProfile(entries);
+                stockProfile = ParseStockProfile(entries);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Exception occurred in ProcessStockProfileResponse: {ex}");
             }
 
-            return trending;
+            return stockProfile;
         }
 
         /// <summary>
@@ -440,7 +479,7 @@ namespace StockProfiler
             try
             {
                 var entries = JsonConvert.DeserializeObject<Charts>(response);
-                //trending = ParseCharts(entries);
+                trending = ParseCharts(entries);
             }
             catch (Exception ex)
             {
@@ -448,6 +487,11 @@ namespace StockProfiler
             }
 
             return trending;
+        }
+
+        private Charts ParseCharts(Charts entries)
+        {
+            return entries;
         }
         #endregion
         #region Stock Analysis
@@ -495,7 +539,7 @@ namespace StockProfiler
         /// <returns></returns>
         public StockAnalysis ParseStockAnalysis(StockAnalysis entries)
         {
-            throw new NotImplementedException();
+            return entries;
         }
 
         #endregion
@@ -526,7 +570,7 @@ namespace StockProfiler
             try
             {
                 var entries = JsonConvert.DeserializeObject<HistoricalData>(response);
-                //trending = ParseHistoricalData(entries);
+                trending = ParseHistoricalData(entries);
             }
             catch (Exception ex)
             {
@@ -541,9 +585,9 @@ namespace StockProfiler
         /// </summary>
         /// <param name="entries"></param>
         /// <returns></returns>
-        public Trending ParseHistoricalData(HistoricalData entries)
+        public HistoricalData ParseHistoricalData(HistoricalData entries)
         {
-            throw new NotImplementedException();
+            return entries;
         }
     }
 

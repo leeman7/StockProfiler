@@ -9,7 +9,9 @@ namespace StockProfilerUnitTest
     {
         public Container Container { get; set; }
 
+#pragma warning disable xUnit1013 // Public method should be marked as test
         public void Setup()
+#pragma warning restore xUnit1013 // Public method should be marked as test
         {
             Container = new Container();
             Container.Init();
