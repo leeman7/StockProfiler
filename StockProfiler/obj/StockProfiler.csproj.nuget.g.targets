@@ -5,6 +5,6 @@
   </PropertyGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)xunit.core\2.4.1\build\xunit.core.targets" Condition="Exists('$(NuGetPackageRoot)xunit.core\2.4.1\build\xunit.core.targets')" />
-    <Import Project="$(NuGetPackageRoot)mongodb.driver.core\2.12.2\build\MongoDB.Driver.Core.targets" Condition="Exists('$(NuGetPackageRoot)mongodb.driver.core\2.12.2\build\MongoDB.Driver.Core.targets')" />
+    <Import Project="$(NuGetPackageRoot)mongodb.driver.core\2.12.4\build\MongoDB.Driver.Core.targets" Condition="Exists('$(NuGetPackageRoot)mongodb.driver.core\2.12.4\build\MongoDB.Driver.Core.targets')" />
   </ImportGroup>
 </Project>

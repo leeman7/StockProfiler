@@ -46,23 +46,27 @@
           "dependencies": {
             "MongoDB.Bson": {
               "target": "Package",
-              "version": "[2.12.2, )"
+              "version": "[2.12.4, )"
             },
             "MongoDB.Driver": {
               "target": "Package",
-              "version": "[2.12.2, )"
+              "version": "[2.12.4, )"
             },
             "MongoDB.Driver.Core": {
               "target": "Package",
-              "version": "[2.12.2, )"
+              "version": "[2.12.4, )"
             },
             "MongoDB.Driver.GridFS": {
               "target": "Package",
-              "version": "[2.12.2, )"
+              "version": "[2.12.4, )"
             },
             "Moq": {
               "target": "Package",
               "version": "[4.16.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
             },
             "RestClient": {
               "target": "Package",
